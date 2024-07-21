@@ -1,7 +1,7 @@
-function net = createRNN(features)
-[XTrain,YTrain] = createTrainingsData(features);
+function net = createRNN(features,allLabels)
+[XTrain,YTrain] = createTrainingsData(features,allLabels);
 
-layers = createModel(YTrain,features);
+layers = createModel(YTrain,XTrain{1});
 
 options = createTrainingOptions;
 
@@ -10,30 +10,52 @@ net = trainModel(XTrain, YTrain, layers, options);
 
 end
 
-function [XTrain,YTrain] = createTrainingsData(features)
-% label classification for risk by hand (0 not risky, 1 full on risk)
-labels = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.1,0.15,0.2,0.4,0.5,0.55,0.6,0.7,0.8,0.9,0.9,1,1];
+function [XTrain, YTrain] = createTrainingsData(allFeatures, allLabels)
+    numSequences = numel(allFeatures);
+    XTrain = cell(numSequences, 1);
+    YTrain = cell(numSequences, 1);
 
+    % Determine the maximum number of time steps across all sequences
+    maxTimeSteps = max(cellfun(@(x) size(x, 1), allFeatures));
+    
+    % Collect unique categories across all labels
+    allCategories = [];
+    for i = 1:numSequences
+        allCategories = [allCategories; double(allLabels{i})]; % Convert categorical to numeric
+    end
+    uniqueCategories = unique(allCategories);
+    
+    for i = 1:numSequences
+        features = allFeatures{i};
+        labels = allLabels{i};
 
-numTimeSteps = size(features, 1); % get number of time steps
+        numTimeSteps = size(features, 1);
+        numFeatures = size(features, 2);
 
+        % Pad features and labels to ensure all sequences have the same length
+        if numTimeSteps < maxTimeSteps
+            padSize = maxTimeSteps - numTimeSteps;
 
-% creating a cell array, where each cell contains a timestep
-XTrain = cell(numTimeSteps, 1);
-for i = 1:numTimeSteps
-    XTrain{i} = features(i, :)'; % transpose,to have each timestep as a column vec
+            % Pad features with NaNs
+            features = [features; nan(padSize, numFeatures)];
+
+            % Pad labels
+            labelsNumeric = double(labels); % Convert categorical to numeric
+            labelsNumeric = [labelsNumeric; nan(padSize, 1)];
+            labels = categorical(labelsNumeric, uniqueCategories); % Convert back to categorical
+        end
+
+        % Convert to cell array format for training
+        XTrain{i} = num2cell(features, 2)'; % Transpose to have time steps as rows
+        YTrain{i} = labels'; % Transpose labels to match the time steps
+    end
 end
 
-
-% Labels (assumption: Classificatipon for each timestep)
-YTrain = categorical(labels); % Make sure the labels are categorial
-
-end
 
 function layers = createModel(YTrain,features)
 % Modelparameter
 numHiddenUnits = 100; % num of hidden units in LSTM
-numClasses = numel(categories(YTrain)); % num of classes
+numClasses = numel(categories(YTrain{1,1})); % num of classes
 numFeatures = size(features, 2); % num of feats
 
 % RNN-Model
@@ -59,6 +81,9 @@ end
 
 
 function net = trainModel(XTrain, YTrain, layers, options)
+
+ 
+    layers = createModel(XTrain{1});
 % training model
 net = trainNetwork(XTrain, YTrain, layers, options);
 

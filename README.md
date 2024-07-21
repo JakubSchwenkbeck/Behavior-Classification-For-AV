@@ -13,3 +13,18 @@ Model:
 - With the Data in hand, I started thinking about which Learning Model would fit best for the kind of strucutre we have from the Signal Data
 - I chose an (for now "simple") RNN which fits best with the data being structured by TimeSteps
 - with the function createRNN, I handled the creation of traings-data and labels,aswell as the building and training of the RNN itself
+
+  RNN:
+  - sequenceInputLayer(numFeatures) % input layer, dimensions of features
+  - lstmLayer(numHiddenUnits, 'OutputMode', 'last') % LSTM-layer
+  - fullyConnectedLayer(numClasses) % fully connected layer
+  - softmaxLayer % Softmax-layer for classification
+  - classificationLayer]; % classification layer
+
+  Training-options:
+   ('adam', ...
+    'MaxEpochs', 20, ...
+    'MiniBatchSize', 20, ...
+    'Verbose', 1, ...
+    'Plots', 'training-progress')
+  

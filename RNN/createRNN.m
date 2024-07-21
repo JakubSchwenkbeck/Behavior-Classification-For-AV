@@ -12,7 +12,7 @@ end
 
 function [XTrain,YTrain] = createTrainingsData(features)
 % label classification for risk by hand (0 not risky, 1 full on risk)
-labels = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.1,0.15,0.2,0.4,0.5,0.55,0.6,0.7,0.8,0.9,0.9,0.1,0.1];
+labels = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.1,0.15,0.2,0.4,0.5,0.55,0.6,0.7,0.8,0.9,0.9,1,1];
 
 
 numTimeSteps = size(features, 1); % get number of time steps

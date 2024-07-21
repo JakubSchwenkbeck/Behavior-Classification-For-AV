@@ -3,5 +3,12 @@ function Main(AEBSensor)
 sensorData = AEBSensor;
 
 data = preprocessSensorData(sensorData);
-disp(data)
+
+
+net = createRNN(data);
+disp(net);
+
+
+
 end
+

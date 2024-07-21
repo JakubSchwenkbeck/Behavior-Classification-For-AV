@@ -57,7 +57,7 @@ function [positions,velocities,speeds,yaws,angularVelocities,actorIDs,numTimeSte
     velocities = zeros(numTimeSteps, numActors, 3);
     yaws = zeros(numTimeSteps, numActors, 1);
     angularVelocities = zeros(numTimeSteps, numActors, 3);
-    actorIDs = zeros(numActors, 1);
+    actorIDs = zeros(numTimeSteps, 1);
 
     % Extract data from the struct
     for t = 1:numTimeSteps
@@ -67,7 +67,7 @@ function [positions,velocities,speeds,yaws,angularVelocities,actorIDs,numTimeSte
             speeds(t, a,:) = norm(sensorData(t).ActorPoses(a).Velocity);
             yaws(t, a,:) = sensorData(t).ActorPoses(a).Yaw;
             angularVelocities(t, a, :) = sensorData(t).ActorPoses(a).AngularVelocity;
-            actorIDs(a) = sensorData(t).ActorPoses(a).ActorID;
+            actorIDs(t, a,:) = sensorData(t).ActorPoses(a).ActorID;
         end
     end
 end
@@ -88,9 +88,8 @@ function features = intoSingleMatrix(positions,velocities,speeds,yaws,angularVel
                 reshape(velocities, numTimeSteps, []), ...
                 reshape(speeds, numTimeSteps, []), ...
                 reshape(yaws, numTimeSteps, []), ...
-                reshape(angularVelocities, numTimeSteps, [])];
-      actorIDMatrix = repmat(actorIDs', numTimeSteps, 1);
+                reshape(angularVelocities, numTimeSteps, []),...
+                 reshape(actorIDs, numTimeSteps, [])];
   
-   features = [features, actorIDMatrix];
 
 end

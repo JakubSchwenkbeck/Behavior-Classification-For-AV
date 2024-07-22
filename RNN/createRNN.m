@@ -76,7 +76,7 @@ numFeatures = 24; % num of feats
 layers = [ ...
     sequenceInputLayer(numFeatures) % input layer, dimensions of features
     lstmLayer(numHiddenUnits, 'OutputMode', 'sequence') % LSTM-layer
-    fullyConnectedLayer(numClasses1) % fully connected layer
+    fullyConnectedLayer(26) % fully connected layer
     softmaxLayer % Softmax-layer for classification
     classificationLayer]; % classification layer
 

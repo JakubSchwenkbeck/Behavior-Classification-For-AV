@@ -28,3 +28,8 @@ Model:
     'Verbose', 1, ...
     'Plots', 'training-progress')
   
+Training:
+- After I had a running RNN which could handle a single data set, it was time to get it working with multiple data sets of different scenarios
+- The data right now is only compatible with data from the same amount of actors involved, so I'm (at least now) going to follow the data structure
+- After Hanlding which data will be loaded (2 Actors, 3 Actors ,...) and setting the labels for each Matrix, I changed some functions in createRNN to have it work with multiple data sets
+  

@@ -65,10 +65,12 @@ numHiddenUnits = 100; % num of hidden units in LSTM
 % Determine the number of unique classes in labels
 numClasses1 = numel(categories(YTrain{1})); % For labels corresponding to XTrain{1}
 numClasses2 = numel(categories(YTrain{2})); % For labels corresponding to XTrain{2}
+numClasses3 = numel(categories(YTrain{3}));
 disp("Num classes 1 = " + numClasses1);
 disp("Num classes 2 = " + numClasses2);
+disp("Num classes 3 = " + numClasses3);
 % Ensure both have the same number of classes
-assert(numClasses1 == numClasses2, 'The number of classes in the labels is inconsistent.');
+assert(numClasses1 == numClasses2 && numClasses2 ==numClasses3 , 'The number of classes in the labels is inconsistent.');
 
 numFeatures = 24; % num of feats
 
@@ -76,7 +78,7 @@ numFeatures = 24; % num of feats
 layers = [ ...
     sequenceInputLayer(numFeatures) % input layer, dimensions of features
     lstmLayer(numHiddenUnits, 'OutputMode', 'sequence') % LSTM-layer
-    fullyConnectedLayer(26) % fully connected layer
+    fullyConnectedLayer(35) % fully connected layer
     softmaxLayer % Softmax-layer for classification
     classificationLayer]; % classification layer
 

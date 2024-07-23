@@ -38,4 +38,8 @@ Training:
   - The scenarios should be similar in some points but still different real situations, modelling real problems an autonomous driving Car would face in traffi
   - Later on, the RNN should be able to operate on live sensor data with a short term history buffer of sensor data
   - Therefore, not only long sequences should be tested but rather a mixture of quick scenarios, snapshots and regular traffic scenarios
-  
+
+After creating more and more data for the model to test, after 19 scenarios, this is the current state :
+![AV-Classifier-Training from 23-07](https://github.com/user-attachments/assets/24301eb2-7270-43bc-9c55-1a3a6d647f0a)
+
+

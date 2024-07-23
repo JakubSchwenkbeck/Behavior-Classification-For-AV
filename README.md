@@ -36,5 +36,6 @@ Training:
   Creating more Scnearios and Data:
   - For further understanding and feeding the Model with data, I now started to build more Scenarios with different Actors and risk levels, aswell as classified them with categrical labels
   - The scenarios should be similar in some points but still different real situations, modelling real problems an autonomous driving Car would face in traffi
-
+  - Later on, the RNN should be able to operate on live sensor data with a short term history buffer of sensor data
+  - Therefore, not only long sequences should be tested but rather a mixture of quick scenarios, snapshots and regular traffic scenarios
   

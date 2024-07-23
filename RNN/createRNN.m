@@ -11,6 +11,7 @@ net = trainModel(XTrain, YTrain, layers, options);
 end
 
 function [XTrain, YTrain] = createTrainingsData(allFeatures, allLabels)
+
 for i = 1:size (allFeatures)
 XTrain{i} =  allFeatures{i}';
 
@@ -62,15 +63,16 @@ end
 function layers = createModel(YTrain,features)
 % Modelparameter
 numHiddenUnits = 100; % num of hidden units in LSTM
-% Determine the number of unique classes in labels
-numClasses1 = numel(categories(YTrain{1})); % For labels corresponding to XTrain{1}
-numClasses2 = numel(categories(YTrain{2})); % For labels corresponding to XTrain{2}
-numClasses3 = numel(categories(YTrain{3}));
-disp("Num classes 1 = " + numClasses1);
-disp("Num classes 2 = " + numClasses2);
-disp("Num classes 3 = " + numClasses3);
-% Ensure both have the same number of classes
-assert(numClasses1 == numClasses2 && numClasses2 ==numClasses3 , 'The number of classes in the labels is inconsistent.');
+% Concatenate all arrays in YTrain into one array
+
+
+allValues = [YTrain{:}];
+
+% Find the unique values in the concatenated array
+uniqueValues = unique(allValues);
+
+% Determine the number of unique values
+numUniqueValues = numel(uniqueValues);
 
 numFeatures = 24; % num of feats
 
@@ -78,7 +80,7 @@ numFeatures = 24; % num of feats
 layers = [ ...
     sequenceInputLayer(numFeatures) % input layer, dimensions of features
     lstmLayer(numHiddenUnits, 'OutputMode', 'sequence') % LSTM-layer
-    fullyConnectedLayer(35) % fully connected layer
+    fullyConnectedLayer(numUniqueValues) % fully connected layer
     softmaxLayer % Softmax-layer for classification
     classificationLayer]; % classification layer
 
@@ -86,18 +88,41 @@ end
 
 function options = createTrainingOptions
 % determining trainingsoptions 
+% options = trainingOptions('adam', ...
+%     'MaxEpochs', 40, ...
+%     'MiniBatchSize', 1, ...
+%     'SequenceLength', 'longest', ... % Handle varying sequence lengths
+%     'Shuffle', 'every-epoch', ...
+%     'Verbose', 0, ...
+%     'Plots', 'training-progress');
+% end
 options = trainingOptions('adam', ...
-    'MaxEpochs', 30, ...
-    'MiniBatchSize', 1, ...
-    'SequenceLength', 'longest', ... % Handle varying sequence lengths
+    'MaxEpochs', 120, ...
+    'InitialLearnRate', 1e-2, ... % Try reducing this value
+    'MiniBatchSize', 30, ...
     'Shuffle', 'every-epoch', ...
-    'Verbose', 0, ...
+    'Verbose', false, ...
     'Plots', 'training-progress');
 end
 
 
 function net = trainModel(XTrain, YTrain, layers, options)
+[~,x] =size(XTrain)
 
+for i = 1:x
+[~,z ] =size(XTrain{i});
+[~,y ] =size(YTrain{i});
+
+    % disp("XTrain nr "+i + "  " + z)
+    % disp("YTrain nr "+i + "  " + y)
+
+    if(z ~= y)
+        disp("not matching at " + i);
+ disp("XTrain nr "+i + "  " + z)
+    disp("YTrain nr "+i + "  " + y)
+
+    end
+end
  
     %layers = createModel(XTrain{1});
 % training model

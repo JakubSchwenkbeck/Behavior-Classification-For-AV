@@ -30,16 +30,21 @@ label11 = [0.2,0.2,0.3,0.3,0.3,0.3,0.5,0.5,0.55,0.6,0.7,0.7,0.7,0.75,0.76,0.8,0.
 
 
 allLabels{1} = categorical(label1);
-allLabels{2} = categorical(label2);
-allLabels{3} = categorical(label3);
-allLabels{4} = categorical(label4);
-allLabels{5} = categorical(label5);
-allLabels{6} = categorical(label6);
 
-allLabels{7} = categorical(label7);
+allLabels{2} = categorical(label10);
 
-allLabels{8} = categorical(label8);
+allLabels{3} = categorical(label11);
 
+allLabels{4} = categorical(label2);
+allLabels{5} = categorical(label3);
+allLabels{6} = categorical(label4);
+allLabels{7} = categorical(label5);
+allLabels{8} = categorical(label6);
+
+allLabels{9} = categorical(label7);
+
+allLabels{10} = categorical(label8);
+allLabels{11} = categorical(label9);
 
 elseif(numActor == 3)
 

@@ -49,7 +49,7 @@ function changePanel(index,predict,Win)
         Win.Panel.BackgroundColor = [r, g, b];
         
       
-        pause(1);
+        pause(0.2);
          disp("here")
 [~,sz] =  size(predict);
         if(index+1 <=sz)

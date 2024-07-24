@@ -52,6 +52,9 @@ labelB1 = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1
 labelB2 = [0,0,0.1,0.1,0.1,0.2,0.2,0.2,0.2,0.3,0.3,0.3,0.3,0.4,0.4,0.4,0.4,0.5,0.5,0.5,0.6,0.6,0.6,0.7,0.7,0.8,0.8,0.9,0.9,0.9,0.9,1,1];
 
 labelB3 = [0.1,0.2,0.2,0.3,0.4,0.5,0.5,0.6,0.7,0.7,0.8,0.8,0.8,0.9,0.9,0.9];
+
+labelB4 = [0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.2,0.2,0.2,0.2,0.2,0.3,0.3,0.3,0.3,0.3,0.3,0.4,0.4,0.5,0.5,0.5,0.5,0.6,0.6,0.7,0.7,0.8,0,0.8,0.8,0.9,0.9,0.9,0.9,0.9,1,1,1,1,];
+
 noiseLevel = 0.01; % Adjust this to control the amount of noise
 
 % Add small random noise to each array to create new versions
@@ -65,6 +68,7 @@ label98 = label9 + abs( noiseLevel )* randn(size(label9));
 labelB11 = labelB1 + abs( noiseLevel )* randn(size(labelB1));
 labelB21 = labelB2 + abs( noiseLevel )* randn(size(labelB2));
 labelB31 = labelB3 + abs( noiseLevel )* randn(size(labelB3));
+labelB41 = labelB4 + abs( noiseLevel )* randn(size(labelB4));
 
 catch
 
@@ -113,6 +117,8 @@ allLabels{22} = categorical(labelB2);
 allLabels{23} = categorical(labelB21);
 allLabels{24} = categorical(labelB3);
 allLabels{25} = categorical(labelB31);
+allLabels{26} = categorical(labelB4);
+allLabels{27} = categorical(labelB41);
 
 
 

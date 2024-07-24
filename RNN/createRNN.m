@@ -129,5 +129,28 @@ end
 % training model
 net = trainNetwork(XTrain, YTrain, layers, options);
 
-end
 
+testNetwork(net);
+
+
+end
+function testNetwork(TrainedNet)
+
+folderPath ="C:\Users\jakub\OneDrive\Dokumente\MATLAB\AV-Classifier";
+    
+filePath = fullfile(folderPath, 'BAEB4.mat');
+
+dataStruct = load(filePath);
+
+data = preprocessSensorData(dataStruct.BAEB4);
+
+YTest = [0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.2,0.2,0.2,0.2,0.2,0.3,0.3,0.3,0.3,0.3,0.3,0.4,0.4,0.5,0.5,0.5,0.5,0.6,0.6,0.7,0.7,0.8,0,0.8,0.8,0.9,0.9,0.9,0.9,0.9,1,1,1,1,];
+
+
+YTest = categorical(YTest);
+
+predictedLabels = classify(TrainedNet, transpose(data));
+
+disp(predictedLabels)
+
+end

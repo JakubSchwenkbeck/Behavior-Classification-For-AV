@@ -79,11 +79,11 @@ numFeatures = 24; % num of feats
 % RNN-Model
 layers = [ ...
     sequenceInputLayer(numFeatures) % input layer, dimensions of features
-    lstmLayer(numHiddenUnits, 'OutputMode', 'sequence') % LSTM-layer
+    lstmLayer(numHiddenUnits, 'OutputMode', 'sequence') % First LSTM-layer
+    lstmLayer(numHiddenUnits, 'OutputMode', 'sequence') % Second LSTM-layer (additional)
     fullyConnectedLayer(numUniqueValues) % fully connected layer
     softmaxLayer % Softmax-layer for classification
     classificationLayer]; % classification layer
-
 end
 
 function options = createTrainingOptions
@@ -97,11 +97,11 @@ function options = createTrainingOptions
 %     'Plots', 'training-progress');
 % end
 options = trainingOptions('adam', ...
-    'MaxEpochs', 1000, ...
+    'MaxEpochs', 1500, ...
     'InitialLearnRate', 1e-3, ... % Try reducing this value
-    'MiniBatchSize', 30, ...
+    'MiniBatchSize', 40, ...
     'Shuffle', 'every-epoch', ...
-    'ValidationFrequency', 25, ...
+    'ValidationFrequency', 20, ...
     'Verbose', false, ...
     'Plots', 'training-progress');
 end
@@ -130,7 +130,7 @@ end
 net = trainNetwork(XTrain, YTrain, layers, options);
 
 
-testNetwork(net);
+%testNetwork(net);
 
 
 end

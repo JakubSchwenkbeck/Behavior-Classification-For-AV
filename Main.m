@@ -8,13 +8,28 @@ function Main
 % 
 
 labels = createLabels(2,size);
-    
-net = createRNN(data,labels);
-disp(net);
+    netWrapper(data,labels);
+
+
+end
+
+function netWrapper(data,labels)
+    try
+            net = createRNN(data,labels);
+             disp(net);
+    catch
+        netWrapper(data,labels);
+        
+    end
+       
+
 
 
 
 end
+
+
+
 
 function [size,allData] = loadAllData(folderPath)
  matFiles = dir(fullfile(folderPath, '*.mat'));

@@ -97,11 +97,11 @@ function options = createTrainingOptions
 %     'Plots', 'training-progress');
 % end
 options = trainingOptions('adam', ...
-    'MaxEpochs', 1500, ...
-    'InitialLearnRate', 1e-3, ... % Try reducing this value
-    'MiniBatchSize', 40, ...
+    'MaxEpochs', 2000, ...
+    'InitialLearnRate', 1e-1, ... % Try reducing this value
+    'MiniBatchSize', 1000, ...
     'Shuffle', 'every-epoch', ...
-    'ValidationFrequency', 20, ...
+    'ValidationFrequency', 50, ...
     'Verbose', false, ...
     'Plots', 'training-progress');
 end
@@ -138,16 +138,16 @@ function testNetwork(TrainedNet)
 
 folderPath ="C:\Users\jakub\OneDrive\Dokumente\MATLAB\AV-Classifier";
     
-filePath = fullfile(folderPath, 'BAEB4.mat');
+filePath = fullfile(folderPath, 'CAEB9.mat');
 
 dataStruct = load(filePath);
 
-data = preprocessSensorData(dataStruct.BAEB4);
-
-YTest = [0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.2,0.2,0.2,0.2,0.2,0.3,0.3,0.3,0.3,0.3,0.3,0.4,0.4,0.5,0.5,0.5,0.5,0.6,0.6,0.7,0.7,0.8,0,0.8,0.8,0.9,0.9,0.9,0.9,0.9,1,1,1,1,];
-
-
-YTest = categorical(YTest);
+data = preprocessSensorData(dataStruct.CAEB9);
+% 
+% YTest = [0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.2,0.2,0.2,0.2,0.2,0.3,0.3,0.3,0.3,0.3,0.3,0.4,0.4,0.5,0.5,0.5,0.5,0.6,0.6,0.7,0.7,0.8,0,0.8,0.8,0.9,0.9,0.9,0.9,0.9,1,1,1,1,];
+% 
+% 
+% YTest = categorical(YTest);
 
 predictedLabels = classify(TrainedNet, transpose(data));
 

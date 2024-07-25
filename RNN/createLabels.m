@@ -72,6 +72,14 @@ labelC3 =[0.2,0.2,0.2,0.2,0.2,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.
 
 labelC4 = [0.2,0.2,0.2,0.2,0.2,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0,0,0,0,];
 
+labelC5= [0.2,0.2,0.2,0.2,0.2,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0,0,0,0,];
+
+labelC6 = [0.1,0.1,0.1,0,0,0,0,0,0,0,0,0];
+
+labelC7 =[0.1,0.1,0,0,0,0,0,0];
+
+labelC8 =[0.1,0.2,0.4,0.5,0.6,0.7,0.7,0.8];
+
 noiseLevel = 0.01; % Adjust this to control the amount of noise
 
 % Add small random noise to each array to create new versions
@@ -90,6 +98,21 @@ labelB51 = labelB5 + abs( noiseLevel )* randn(size(labelB5));
 labelB61 = labelB6 + abs( noiseLevel )* randn(size(labelB6));
 labelB71 = labelB7 + abs( noiseLevel )* randn(size(labelB7));
 labelB81 = labelB8 + abs( noiseLevel )* randn(size(labelB8));
+labelC11 = labelC1 + abs( noiseLevel )* randn(size(labelC1));
+labelC21 = labelC2 + abs( noiseLevel )* randn(size(labelC2));
+labelC31 = labelC3 + abs( noiseLevel )* randn(size(labelC3));
+labelC41 = labelC4 + abs( noiseLevel )* randn(size(labelC4));
+labelC51 = labelC5 + abs( noiseLevel )* randn(size(labelC5));
+labelC61 = labelC6 + abs( noiseLevel )* randn(size(labelC6));
+labelC71 = labelC7 + abs( noiseLevel )* randn(size(labelC7));
+labelC81 = labelC8 + abs( noiseLevel )* randn(size(labelC8));
+
+
+
+
+
+
+
 
 catch
 
@@ -150,6 +173,40 @@ allLabels{32} = categorical(labelB7);
 allLabels{33} = categorical(labelB71);
 allLabels{34} = categorical(labelB8);
 allLabels{35} = categorical(labelB81);
+allLabels{36} = categorical(labelC1);
+allLabels{37} = categorical(labelC11);
+allLabels{38} = categorical(labelC2);
+allLabels{39} = categorical(labelC21);
+allLabels{40} = categorical(labelC3);
+allLabels{41} = categorical(labelC31);
+allLabels{42} = categorical(labelC4);
+allLabels{43} = categorical(labelC41);
+allLabels{44} = categorical(labelC5);
+allLabels{45} = categorical(labelC51);
+allLabels{46} = categorical(labelC6);
+allLabels{47} = categorical(labelC61);
+allLabels{48} = categorical(labelC7);
+allLabels{49} = categorical(labelC71);
+allLabels{50} = categorical(labelC8);
+allLabels{51} = categorical(labelC81);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 catch
 createLabels(numActor,sizee);
 end

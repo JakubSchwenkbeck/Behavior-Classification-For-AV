@@ -20,11 +20,7 @@ function netWrapper(data,labels)
     catch
         netWrapper(data,labels);
         
-    end
-       
-
-
-
+    end  
 
 end
 

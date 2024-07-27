@@ -22,8 +22,9 @@ function Labels = createLabels(numActor,Num)
 
 Labels = cell(1,Num);
 
+%% CAR AND PREDESTRIAN
 
-%% No Risk at all - Car driving straight, pedestrian far far away not moving
+%% No Risk at all - Car driving straight, pedestrian far far away not moving, car varies speeds
 Labels{1} = zeros(1,7);
 Labels{2} = zeros(1,7);
 Labels{3} = zeros(1,15);
@@ -32,10 +33,19 @@ Labels{5} = zeros(1,14);
 Labels{6} = zeros(1,41);
 Labels{7} = zeros(1,40);
 
+%% No Risk at all - Car driving straight, pedestrian far away moving slow, car varies speeds
 
+Labels{8} = zeros(1,39);
+Labels{9} = zeros(1,36);
+Labels{10} = zeros(1,35);
+Labels{11} = zeros(1,8);
+Labels{12} = zeros(1,9);
+Labels{13} = zeros(1,8);
 
+%% Adding sligth risk by moving Pedestrian closer
 
-
+Labels{14} = [0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1];
+Labels{15} = [0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1];
 
 
 

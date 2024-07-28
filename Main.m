@@ -1,11 +1,7 @@
 function Main
 
-[size,data] = loadAllData("C:\Users\jakub\OneDrive\Dokumente\MATLAB\AV-Classifier\SensorData\2 Actors");
+[size,data] = loadAllData("C:\Users\jakub\OneDrive\Dokumente\MATLAB\AV-Classifier\SensorData");
 
-% data = loadAllData("C:\Users\jakub\OneDrive\Dokumente\MATLAB\AV-Classifier\SensorData\3 Actors");
-% 
-% data = loadAllData("C:\Users\jakub\OneDrive\Dokumente\MATLAB\AV-Classifier\SensorData\4 Actors");
-% 
 
     netWrapper(size,data);
 

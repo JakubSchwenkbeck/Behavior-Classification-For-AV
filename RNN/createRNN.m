@@ -74,7 +74,7 @@ uniqueValues = unique(allValues);
 % Determine the number of unique values
 numUniqueValues = numel(uniqueValues);
 
-numFeatures = 24; % num of feats
+numFeatures = 6*12; % num of feats
 
 % RNN-Model
 layers = [ ...

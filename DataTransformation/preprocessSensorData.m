@@ -9,6 +9,7 @@ function processedData = preprocessSensorData(sensorData)
     [positions,velocities,speeds,yaws,angularVelocities]= noiseReduction(positions,velocities,speeds,yaws,angularVelocities);
     processedData = intoSingleMatrix(positions,velocities,speeds,yaws,angularVelocities,actorIDs,numTimeSteps);
 
+    processedData = adjustCols(processedData);
    
 end
 
@@ -92,4 +93,22 @@ function features = intoSingleMatrix(positions,velocities,speeds,yaws,angularVel
                  reshape(actorIDs, numTimeSteps, [])];
   
 
+end
+
+function result = adjustCols(matrix)
+    % Get the size of the input matrix
+    [rows, cols] = size(matrix);
+
+    % Desired number of columns
+    targetCols = 12 * 6; % MAX 6 ACTORS
+
+    % Initialize the result matrix with zeros
+    result = zeros(rows, targetCols);
+
+    % Copy the original matrix into the result matrix
+    if cols <= targetCols
+        result(:, 1:cols) = matrix;  % Copy original columns
+    else
+        result = matrix(:, 1:targetCols);  % Truncate to targetCols
+    end
 end

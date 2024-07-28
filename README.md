@@ -28,18 +28,7 @@ Model:
     'Verbose', 1, ...
     'Plots', 'training-progress')
   
-Training:
-- After I had a running RNN which could handle a single data set, it was time to get it working with multiple data sets of different scenarios
-- The data right now is only compatible with data from the same amount of actors involved, so I'm (at least now) going to follow the data structure
-- After Hanlding which data will be loaded (2 Actors, 3 Actors ,...) and setting the labels for each Matrix, I changed some functions in createRNN to have it work with multiple data sets
-
-  Creating more Scnearios and Data:
-  - For further understanding and feeding the Model with data, I now started to build more Scenarios with different Actors and risk levels, aswell as classified them with categrical labels
-  - The scenarios should be similar in some points but still different real situations, modelling real problems an autonomous driving Car would face in traffic
-  - Later on, the RNN should be able to operate on live sensor data with a short term history buffer of sensor data
-  - Therefore, not only long sequences should be tested but rather a mixture of quick scenarios, snapshots and regular traffic scenarios
-
-After reworking the labelling and thinking about the right settings for the RNN, this is the newest Training with a small dataset:
-![Training 24-07-24](https://github.com/user-attachments/assets/27ec2cf2-71b4-43e2-921d-406f4e4d584f)
-
+Training and Data:
+- After learning more about the RNN and how the Data is processed, I started a structured approach to retrieving Data and labelling them correctly
+  
 

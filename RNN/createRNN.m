@@ -80,7 +80,7 @@ numFeatures = 24; % num of feats
 layers = [ ...
     sequenceInputLayer(numFeatures) % input layer, dimensions of features
     lstmLayer(numHiddenUnits, 'OutputMode', 'sequence') % First LSTM-layer
-    lstmLayer(numHiddenUnits, 'OutputMode', 'sequence') % Second LSTM-layer (additional)
+    dropoutLayer(0.2) % Dropout with 20% rate
     fullyConnectedLayer(numUniqueValues) % fully connected layer
     softmaxLayer % Softmax-layer for classification
     classificationLayer]; % classification layer
@@ -97,9 +97,9 @@ function options = createTrainingOptions
 %     'Plots', 'training-progress');
 % end
 options = trainingOptions('adam', ...
-    'MaxEpochs', 2000, ...
-    'InitialLearnRate', 1e-1, ... % Try reducing this value
-    'MiniBatchSize', 1000, ...
+    'MaxEpochs', 1000, ...
+    'InitialLearnRate', 1e-3, ... % Try reducing this value
+    'MiniBatchSize', 32, ...
     'Shuffle', 'every-epoch', ...
     'ValidationFrequency', 50, ...
     'Verbose', false, ...
@@ -130,7 +130,7 @@ end
 net = trainNetwork(XTrain, YTrain, layers, options);
 
 
-%testNetwork(net);
+testNetwork(net);
 
 
 end

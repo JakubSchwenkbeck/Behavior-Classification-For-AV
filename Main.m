@@ -14,6 +14,7 @@ end
 
 function netWrapper(size,data)
     try
+        disp("here")
         labels = createLabels(2,size);
 
             net = createRNN(data,labels);

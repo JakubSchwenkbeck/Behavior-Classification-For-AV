@@ -108,7 +108,8 @@ end
 
 
 function net = trainModel(XTrain, YTrain, layers, options)
-[~,x] =size(XTrain)
+[~,x] =size(XTrain);
+disp(x + " DataSets for Training");
 
 for i = 1:x
 [~,z ] =size(XTrain{i});
@@ -137,12 +138,13 @@ end
 function testNetwork(TrainedNet)
 
 folderPath ="C:\Users\jakub\OneDrive\Dokumente\MATLAB\AV-Classifier";
-    
-filePath = fullfile(folderPath, 'CAEB9.mat');
+filename = 'SenData_C2.mat';
+ filenameWithoutExtension = strrep(filename, '.mat', '');
+filePath = fullfile(folderPath, filename);
 
 dataStruct = load(filePath);
 
-data = preprocessSensorData(dataStruct.CAEB9);
+data = preprocessSensorData(dataStruct.(filenameWithoutExtension));
 % 
 % YTest = [0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.2,0.2,0.2,0.2,0.2,0.3,0.3,0.3,0.3,0.3,0.3,0.4,0.4,0.5,0.5,0.5,0.5,0.6,0.6,0.7,0.7,0.8,0,0.8,0.8,0.9,0.9,0.9,0.9,0.9,1,1,1,1,];
 % 

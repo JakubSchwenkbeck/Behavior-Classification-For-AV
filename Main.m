@@ -3,21 +3,22 @@ function Main
 [size,data] = loadAllData("C:\Users\jakub\OneDrive\Dokumente\MATLAB\AV-Classifier\SensorData");
 
 
-    netWrapper(size,data);
+labels = createLabels(2,size);
+
+            net = createRNN(data,labels);
+   % netWrapper(size,data);
 
 
 end
 
 function netWrapper(size,data)
-    try
-        disp("here")
+    try  disp("here")
         labels = createLabels(2,size);
 
             net = createRNN(data,labels);
              disp(net);
     catch
-        netWrapper(size,data);
-        
+        disp("Error in opening RNN")
     end  
 
 end

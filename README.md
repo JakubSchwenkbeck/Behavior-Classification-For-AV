@@ -30,5 +30,7 @@ Model:
   
 Training and Data:
 - After learning more about the RNN and how the Data is processed, I started a structured approach to retrieving Data and labelling them correctly
+- By new Design, there is now no problem in switching between different number of actors for the single RNN
+- With the first 40 simple scenarios, the RNN's accuracy lies between 95% and 99%
   
 

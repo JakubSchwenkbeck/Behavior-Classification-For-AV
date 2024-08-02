@@ -3,7 +3,7 @@ As part of the Matlab Challange, I chose to write a Project to classify Object b
 After working in the Automotive Industry with Matlab, I really wanted to keep on using the Mathworks products and get better at various field within Software engenieering.
 
 
-------Workflow:------
+------**Workflow**:------
 
 Data:
 - Firstly, I started out by creating simple Scenes in the Scenario Simulater from the ADT (Autonomous Driving Toolbox). After experimenting with the Designer, I then extracted my first Signal Data
@@ -31,6 +31,8 @@ Model:
 Training and Data:
 - After learning more about the RNN and how the Data is processed, I started a structured approach to retrieving Data and labelling them correctly
 - By new Design, there is now no problem in switching between different number of actors for the single RNN
-- With the first 40 simple scenarios, the RNN's accuracy lies between 95% and 99%
+- With the first 40 simple scenarios, the RNN's accuracy lies between 95% and 99%:
+  ![image](https://github.com/user-attachments/assets/56803e7d-4022-4adb-b4b2-c6bad6e020c6)
+  
   
 

@@ -33,6 +33,29 @@ After working in the Automotive Industry with Matlab, I really wanted to keep on
 - After learning more about the RNN and how the Data is processed, I started a structured approach of retrieving Data and labelling them correctly
 - By the new Design, there is no problem in switching between different number of actors for the single RNN
 - With the first 40 simple scenarios, the RNN's accuracy lies between 95% and 99%:
+  Using :
+  
+   **RNN-Model**
+layers :
+- sequenceInputLayer(numFeatures) % input layer, dimensions of features
+-  lstmLayer(numHiddenUnits, 'OutputMode', 'sequence') % First LSTM-layer
+-  dropoutLayer(0.2) % Dropout with 20% rate
+- fullyConnectedLayer(numUniqueValues) % fully connected layer
+-  softmaxLayer % Softmax-layer for classification
+- classificationLayer % classification layer
+end
+
+
+options = trainingOptions('adam', ...
+  - 'MaxEpochs', 1000, ...
+  -  'InitialLearnRate', 1e-3, ... % Try reducing this value
+  -  'MiniBatchSize', 32, ...
+  -  Shuffle', 'every-epoch', ...
+  -  'ValidationFrequency', 50, ...
+  -  'Verbose', false, ...
+  -  'Plots', 'training-progress');
+end
+
   ![image](https://github.com/user-attachments/assets/56803e7d-4022-4adb-b4b2-c6bad6e020c6)
   
   

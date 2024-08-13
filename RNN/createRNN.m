@@ -138,7 +138,7 @@ end
 function testNetwork(TrainedNet)
 
 folderPath ="C:\Users\jakub\OneDrive\Dokumente\MATLAB\AV-Classifier";
-filename = 'SenData_C2.mat';
+filename = 'SenData_C22.mat';
  filenameWithoutExtension = strrep(filename, '.mat', '');
 filePath = fullfile(folderPath, filename);
 

@@ -78,7 +78,7 @@ The initial testing of the RNN model shows high accuracy in classifying object b
 To get started with this project:
 
 1. **Clone the Repository:**
-   `git clone https://github.com/your-username/behavior-classificator.git`
+   `git clone https://github.com/JakubSchwenkbeck/Behavior-Classification-For-AV/.git`
 2. **Navigate to the Project Directory:**
    `cd behavior-classificator`
 3. **Run the Model:** Follow the instructions in the `scripts` directory to set up and run the model.

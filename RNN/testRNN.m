@@ -11,6 +11,6 @@ data = preprocessSensorData(dataStruct.(filenameWithoutExtension));
 
 predictedLabels = classify(TrainedNet, transpose(data));
 
-%disp(predictedLabels)
+disp(predictedLabels)
 
 end

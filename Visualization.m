@@ -24,6 +24,10 @@ function [allData, scenario, sensor] = TestScenarioForVisualization(RiskArray)
     % Create the driving scenario and the ego vehicle
     [scenario, egoVehicle] = createDrivingScenario();
 
+    % previous handles keep track of persistent variables like texts in the
+    % loop
+    previousHandles = struct();
+
     % Create the sensors used in the scenario
     sensor = createSensor(scenario);
 
@@ -84,8 +88,7 @@ function [allData, scenario, sensor] = TestScenarioForVisualization(RiskArray)
         % Update the risk visualization
         if riskIndex <= length(numericRiskArray)
             currentRisk = numericRiskArray(riskIndex);
-            color = [1-currentRisk, currentRisk, 0]; % Green to Red gradient
-            riskOverlay(color);
+           previousHandles= riskOverlay(currentRisk,previousHandles);
             riskIndex = riskIndex + 1;
         end
 
@@ -104,7 +107,7 @@ end
 % Helper functions %
 %%%%%%%%%%%%%%%%%%%%
 
-function riskOverlay(color)
+function previousHandles =riskOverlay(currentRisk,previousHandles)
     % riskOverlay - Adds a colored overlay representing risk level.
     %
     % This helper function creates a rectangular patch over the scenario
@@ -112,13 +115,37 @@ function riskOverlay(color)
     % level. The color is semi-transparent.
     %
     % Args:
-    %   color (1x3 vector): RGB color value for the overlay.
-    
+    %   currentRisk: numerical number between 0 and 1
+    %   previousHandles: a struct with handles to the previous text objects
+
+    % Delete previous text objects if they exist
+    if isfield(previousHandles, 'classificationText')
+        delete(previousHandles.classificationText);
+    end
+    if isfield(previousHandles, 'riskText')
+        delete(previousHandles.riskText);
+    end
+
+    % Define the color based on the current risk level
+    color = [1-currentRisk, currentRisk, 0]; % Green to Red gradient
+
+    % Create the overlay patch
     patch([-5 5 5 -5], [-5 -5 5 5], color, 'FaceAlpha', 0.2, 'EdgeColor', 'none');
+
     % Add label for classification in the center of the overlay
-    text(0, 0, 'Classification', 'HorizontalAlignment', 'center', ...
+    classificationText = text(2, 0, 'Classification', 'HorizontalAlignment', 'center', ...
         'VerticalAlignment', 'middle', 'FontSize', 12, 'Color', 'k');
+
+    % Add label with the classification risk level
+    riskText = text(-2, 0, " The current Risk level is:" + num2str(currentRisk * 100) + "% ", ...
+        'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', ...
+        'FontSize', 10, 'Color', 'k');
+
+    % Return handles to the new text objects
+    previousHandles.classificationText = classificationText;
+    previousHandles.riskText = riskText;
 end
+
 
 function sensor = createSensor(scenario)
     % createSensor - Creates and returns a sensor object for the scenario.

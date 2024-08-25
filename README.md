@@ -1,15 +1,18 @@
+
 # Behavior Classificator for Autonomous Vehicles
 
 Welcome to the **Behavior Classificator for Autonomous Vehicles** project! This project is part of the **Matlab-Simulink Challenge** and focuses on classifying object behavior and assessing the risk it poses to autonomous vehicles. The project leverages MATLAB and Simulink to create a robust model for autonomous driving scenarios.
+
 
 ## Table of Contents
 - [Overview](#overview)
 - [Workflow](#workflow)
   - [Data Understanding](#data-understanding)
   - [Model](#model)
-  - [Initial RNN Setup](#initial-rnn-setup)
+  - [RNN Setup](#rnn-setup)
   - [Training and Data](#training-and-data)
 - [Results](#results)
+- [Conclusion](#conclusion)
 - [Getting Started](#getting-started)
 - [License](#license)
 
@@ -28,39 +31,32 @@ The project aims to classify the behavior of objects within autonomous driving s
 ### Model
 
 1. **Model Selection:** Chose a Recurrent Neural Network (RNN) suitable for time-series data.
-2. **Initial RNN:**
-   - **Layers:**
-     - `sequenceInputLayer(numFeatures)` - Input layer
-     - `lstmLayer(numHiddenUnits, 'OutputMode', 'last')` - LSTM layer
-     - `fullyConnectedLayer(numClasses)` - Fully connected layer
-     - `softmaxLayer` - Softmax layer for classification
-     - `classificationLayer` - Classification layer
-   - **Training Options:**
-     - Optimizer: Adam
-     - Max Epochs: 20
-     - MiniBatchSize: 20
-     - Verbose: 1
-     - Plots: Training-progress
+   - **Why RNNs?** RNNs are particularly suitable for this project because they are designed to process sequences of data, making them ideal for understanding temporal dependencies in time-series data such as the behavior of objects in autonomous driving scenarios. MATLAB's deep learning toolbox provides efficient tools for designing, training, and evaluating RNNs, making it a strong choice for this application.
 
-### Initial RNN Setup
+### RNN Setup
 
 1. **Revised RNN:**
-   - **Layers:**
-     - `sequenceInputLayer(numFeatures)` - Input layer
-     - `lstmLayer(numHiddenUnits, 'OutputMode', 'sequence')` - First LSTM layer
-     - `dropoutLayer(0.2)` - Dropout layer
-     - `fullyConnectedLayer(numUniqueValues)` - Fully connected layer
-     - `softmaxLayer` - Softmax layer for classification
-     - `classificationLayer` - Classification layer
-   - **Training Options:**
-     - Optimizer: Adam
-     - Max Epochs: 1000
-     - Initial Learn Rate: 1e-3
-     - MiniBatchSize: 32
-     - Shuffle: Every-epoch
-     - Validation Frequency: 50
-     - Verbose: False
-     - Plots: Training-progress
+
+```matlab
+layers = [
+    sequenceInputLayer(numFeatures) % Input layer, dimensions of features
+    lstmLayer(numHiddenUnits, 'OutputMode', 'sequence') % LSTM layer
+    dropoutLayer(0.2) % Dropout layer with 20% rate
+    fullyConnectedLayer(numUniqueValues) % Fully connected layer
+    softmaxLayer % Softmax layer for classification
+    classificationLayer]; % Classification layer
+end
+
+options = trainingOptions('adam', ...
+    'MaxEpochs', 2500, ...
+    'InitialLearnRate', 1e-3, ... % Adjusting learn rate for better convergence
+    'MiniBatchSize', 32, ...
+    'Shuffle', 'every-epoch', ...
+    'ValidationFrequency', 50, ...
+    'Verbose', false, ...
+    'Plots', 'training-progress');
+end
+```
 
 ### Training and Data
 
@@ -71,7 +67,22 @@ The project aims to classify the behavior of objects within autonomous driving s
 
 The initial testing of the RNN model shows high accuracy in classifying object behavior, with results ranging between 95% and 99%. 
 
-![Training Progress](https://github.com/user-attachments/assets/56803e7d-4022-4adb-b4b2-c6bad6e020c6)
+![Training Progress](https://github.com/user-attachments/assets/0e56a7cd-e740-48a7-97cb-cccf3f8dfc70)
+
+
+## Conclusion
+
+This project demonstrated the effectiveness of using RNNs for classifying object behavior in autonomous driving scenarios. By leveraging MATLAB and Simulink, I was able to build a model that accurately predicts the risk level posed by different objects, which is essential for the safe operation of autonomous vehicles.
+
+### What I Learned:
+- **Data Preprocessing:** The importance of preprocessing in improving model performance.
+- **Model Selection:** Why RNNs are particularly well-suited for time-series data in autonomous driving.
+- **MATLAB-Simulink Integration:** How to effectively use MATLAB and Simulink together for modeling and simulation.
+
+### Future Enhancements:
+- **Real-World Testing:** Integrate real-world data to further validate the model.
+- **Model Optimization:** Explore different architectures and hyperparameters to enhance model accuracy and efficiency.
+- **Deployment:** Develop methods for deploying the trained model in real-time autonomous systems.
 
 ## Getting Started
 

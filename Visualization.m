@@ -1,9 +1,9 @@
-function [allData, scenario, sensor] = TestScenarioForVisualization()
+function [allData, scenario, sensor] = Visualization(RiskArray)
     % TestScenarioForVisualization - Returns sensor detections and includes
     % a visualization overlay that represents risk levels.
 
     % Initialize RiskArray for demonstration (replace with actual data)
-    RiskArray = rand(1, 100); % Placeholder: Random risk values between 0 and 1
+   % RiskArray = rand(1, 100); % Placeholder: Random risk values between 0 and 1
 
     % Create the drivingScenario object and ego car
     [scenario, egoVehicle] = createDrivingScenario();

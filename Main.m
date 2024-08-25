@@ -6,23 +6,12 @@ function Main
 labels = createLabels(2,size);
 
             net = createRNN(data,labels);
-   % netWrapper(size,data);
 
-
-end
-
-function netWrapper(size,data)
-    try  disp("here")
-        labels = createLabels(2,size);
-
-            net = createRNN(data,labels);
-             disp(net);
-    catch
-        disp("Error in opening RNN")
-    end  
+            filename = "VisualData.mat";
+            RiskArray = testRNN(net,filename);
+            Visualization(RiskArray);
 
 end
-
 
 
 

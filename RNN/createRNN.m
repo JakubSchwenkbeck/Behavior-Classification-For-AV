@@ -97,7 +97,7 @@ function options = createTrainingOptions
 %     'Plots', 'training-progress');
 % end
 options = trainingOptions('adam', ...
-    'MaxEpochs', 1000, ...
+    'MaxEpochs', 2000, ...
     'InitialLearnRate', 1e-3, ... % Try reducing this value
     'MiniBatchSize', 32, ...
     'Shuffle', 'every-epoch', ...
@@ -131,28 +131,7 @@ end
 net = trainNetwork(XTrain, YTrain, layers, options);
 
 
-testNetwork(net);
 
 
 end
-function testNetwork(TrainedNet)
 
-folderPath ="C:\Users\jakub\OneDrive\Dokumente\MATLAB\AV-Classifier";
-filename = 'SenData_C22.mat';
- filenameWithoutExtension = strrep(filename, '.mat', '');
-filePath = fullfile(folderPath, filename);
-
-dataStruct = load(filePath);
-
-data = preprocessSensorData(dataStruct.(filenameWithoutExtension));
-% 
-% YTest = [0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.2,0.2,0.2,0.2,0.2,0.3,0.3,0.3,0.3,0.3,0.3,0.4,0.4,0.5,0.5,0.5,0.5,0.6,0.6,0.7,0.7,0.8,0,0.8,0.8,0.9,0.9,0.9,0.9,0.9,1,1,1,1,];
-% 
-% 
-% YTest = categorical(YTest);
-
-predictedLabels = classify(TrainedNet, transpose(data));
-
-disp(predictedLabels)
-
-end

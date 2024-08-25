@@ -1,63 +1,84 @@
 function [allData, scenario, sensor] = TestScenarioForVisualization(RiskArray)
-    % TestScenarioForVisualization - Returns sensor detections and includes
-    % a visualization overlay that represents risk levels.
+    % TestScenarioForVisualization - Simulates a driving scenario and visualizes risk levels.
+    %
+    % This function simulates a driving scenario using a pre-defined set of roads,
+    % actors (e.g., pedestrians, vehicles), and an ego vehicle equipped with sensors.
+    % The function overlays a risk visualization based on the input `RiskArray`.
+    % The simulation results, including sensor detections and scenario data, are 
+    % stored and returned for further analysis.
+    %
+    % Args:
+    %   RiskArray (categorical array): An array representing risk levels for each
+    %   time step in the scenario. The risk levels are assumed to be ordered from
+    %   low to high risk.
+    %
+    % Returns:
+    %   allData (struct): A struct array containing sensor data, including 
+    %   object detections, lane detections, point clouds, and INS measurements 
+    %   for each time step.
+    %   scenario (drivingScenario): The drivingScenario object that defines the 
+    %   environment and actors in the simulation.
+    %   sensor (lidarPointCloudGenerator): The sensor object used for generating 
+    %   point cloud data in the scenario.
 
-    % Create the drivingScenario object and ego car
+    % Create the driving scenario and the ego vehicle
     [scenario, egoVehicle] = createDrivingScenario();
 
-    % Create all the sensors
+    % Create the sensors used in the scenario
     sensor = createSensor(scenario);
 
     % Prepare the figure for visualization
     figure('Name', 'Risk Visualization', 'NumberTitle', 'off');
     hold on;
 
-    % Plot the scenario for the first time
+    % Initial plot of the scenario
     plot(scenario);
 
-    % Map categorical values in RiskArray to numeric values
-    riskLevels = categories(RiskArray); % Get the unique categories
+    % Map categorical values in RiskArray to numeric values between 0 and 1
+    riskLevels = categories(RiskArray); % Get unique risk categories
     numericRiskArray = zeros(size(RiskArray)); % Initialize numeric array
 
-    % Define a mapping from categorical levels to numeric values (0 to 1)
+    % Define mapping from categorical risk levels to numeric values (0 to 1)
     for i = 1:length(riskLevels)
-        % Assume that riskLevels are ordered from low to high risk
+        % Assume risk levels are ordered from low to high risk
         numericRiskArray(RiskArray == riskLevels{i}) = (i-1) / (length(riskLevels) - 1);
     end
 
-    % Loop to update scenario and visualization
-    allData = struct('Time', {}, 'ActorPoses', {}, 'ObjectDetections', {}, 'LaneDetections', {}, 'PointClouds', {}, 'INSMeasurements', {});
+    % Initialize storage for sensor data and scenario information
+    allData = struct('Time', {}, 'ActorPoses', {}, 'ObjectDetections', {}, ...
+                     'LaneDetections', {}, 'PointClouds', {}, 'INSMeasurements', {});
     running = true;
     riskIndex = 1;
-    
+
+    % Main loop to simulate the scenario and update the visualization
     while running
         % Generate the target poses of all actors relative to the ego vehicle
         poses = targetPoses(egoVehicle);
         time  = scenario.SimulationTime;
 
-        % Generate detections for the sensor
+        % Generate detections from the sensor
         laneDetections = [];
         objectDetections = [];
         insMeas = [];
         if sensor.HasRoadsInputPort
-            rdmesh = roadMesh(egoVehicle,min(500,sensor.MaxRange));
+            rdmesh = roadMesh(egoVehicle, min(500, sensor.MaxRange));
             [ptClouds, isValidPointCloudTime] = sensor(poses, rdmesh, time);
         else
             [ptClouds, isValidPointCloudTime] = sensor(poses, time);
         end
 
-        % Aggregate all detections into a structure for later use
+        % Aggregate and store detection data
         if isValidPointCloudTime
             allData(end + 1) = struct( ...
-                'Time',       scenario.SimulationTime, ...
+                'Time', scenario.SimulationTime, ...
                 'ActorPoses', actorPoses(scenario), ...
                 'ObjectDetections', {objectDetections}, ...
                 'LaneDetections', {laneDetections}, ...
-                'PointClouds',   {ptClouds}, ...
-                'INSMeasurements',   {insMeas});
+                'PointClouds', {ptClouds}, ...
+                'INSMeasurements', {insMeas});
         end
 
-        % Advance the scenario one time step and exit the loop if the scenario is complete
+        % Advance the scenario one time step; exit if scenario is complete
         running = advance(scenario);
 
         % Update the risk visualization
@@ -72,10 +93,10 @@ function [allData, scenario, sensor] = TestScenarioForVisualization(RiskArray)
         pause(0.1); % Adjust to match simulation time step
     end
 
-    % Restart the driving scenario to return the actors to their initial positions.
+    % Restart the scenario to reset actor positions
     restart(scenario);
 
-    % Release the sensor object so it can be used again.
+    % Release the sensor object for reuse
     release(sensor);
 end
 
@@ -84,17 +105,34 @@ end
 %%%%%%%%%%%%%%%%%%%%
 
 function riskOverlay(color)
-    % riskOverlay Creates a rectangular patch as a risk overlay with specified color
+    % riskOverlay - Adds a colored overlay representing risk level.
+    %
+    % This helper function creates a rectangular patch over the scenario
+    % visualization, with the specified color indicating the current risk
+    % level. The color is semi-transparent.
+    %
+    % Args:
+    %   color (1x3 vector): RGB color value for the overlay.
+    
     patch([-5 5 5 -5], [-5 -5 5 5], color, 'FaceAlpha', 0.2, 'EdgeColor', 'none');
-    % Add label for classification
-    text(0, 0, 'Classification', 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'FontSize', 12, 'Color', 'k');
+    % Add label for classification in the center of the overlay
+    text(0, 0, 'Classification', 'HorizontalAlignment', 'center', ...
+        'VerticalAlignment', 'middle', 'FontSize', 12, 'Color', 'k');
 end
 
-
 function sensor = createSensor(scenario)
-    % createSensors Returns all sensor objects to generate detections
+    % createSensor - Creates and returns a sensor object for the scenario.
+    %
+    % This helper function initializes a LiDAR sensor for the ego vehicle
+    % in the driving scenario. The sensor generates point cloud data, which 
+    % can be used for object detection and environment perception.
+    %
+    % Args:
+    %   scenario (drivingScenario): The driving scenario containing the actors.
+    %
+    % Returns:
+    %   sensor (lidarPointCloudGenerator): The initialized LiDAR sensor object.
 
-    % Assign into each sensor the physical and radar profiles for all actors
     profiles = actorProfiles(scenario);
     sensor = lidarPointCloudGenerator('SensorIndex', 1, ...
         'SensorLocation', [0.95 0], ...
@@ -103,30 +141,38 @@ function sensor = createSensor(scenario)
 end
 
 function [scenario, egoVehicle] = createDrivingScenario
-    % createDrivingScenario Returns the drivingScenario defined in the Designer
+    % createDrivingScenario - Sets up a driving scenario for simulation.
+    %
+    % This helper function creates a driving scenario with defined roads and 
+    % actors (including pedestrians and vehicles). An ego vehicle is also 
+    % added to the scenario, which will be used in the simulation.
+    %
+    % Returns:
+    %   scenario (drivingScenario): The initialized driving scenario object.
+    %   egoVehicle (vehicle): The ego vehicle in the scenario.
 
-    % Construct a drivingScenario object.
+    % Create a driving scenario object
     scenario = drivingScenario;
 
-    % Add all road segments
+    % Define road segments
     roadCenters = [10 0 0;
-        35.2 0 0;
-        45.6 0 0];
+                   35.2 0 0;
+                   45.6 0 0];
     road(scenario, roadCenters, 'Name', 'Road');
 
-    % Add the actors
+    % Add pedestrians
     pedestrian = actor(scenario, ...
         'ClassID', 4, ...
         'Length', 0.24, ...
         'Width', 0.45, ...
         'Height', 1.7, ...
         'Position', [12.8 10 0], ...
-        'RCSPattern', [-8 -8;-8 -8], ...
+        'RCSPattern', [-8 -8; -8 -8], ...
         'Mesh', driving.scenario.pedestrianMesh, ...
         'Name', 'Pedestrian');
     waypoints = [12.8 10 0;
-        20.7 10.2 0];
-    speed = [1.5;1.5];
+                 20.7 10.2 0];
+    speed = [1.5; 1.5];
     trajectory(pedestrian, waypoints, speed);
 
     pedestrian1 = actor(scenario, ...
@@ -135,12 +181,12 @@ function [scenario, egoVehicle] = createDrivingScenario
         'Width', 0.45, ...
         'Height', 1.7, ...
         'Position', [44.3 4.4 0], ...
-        'RCSPattern', [-8 -8;-8 -8], ...
+        'RCSPattern', [-8 -8; -8 -8], ...
         'Mesh', driving.scenario.pedestrianMesh, ...
         'Name', 'Pedestrian1');
     waypoints = [44.3 4.4 0;
-        39.6 3.1 0];
-    speed = [1.5;1.5];
+                 39.6 3.1 0];
+    speed = [1.5; 1.5];
     trajectory(pedestrian1, waypoints, speed);
 
     % Add the ego vehicle
@@ -150,7 +196,7 @@ function [scenario, egoVehicle] = createDrivingScenario
         'Mesh', driving.scenario.carMesh, ...
         'Name', 'Car');
     waypoints = [10.2 -0.1 0;
-        45.5 0.1 0];
-    speed = [15;15];
+                 45.5 0.1 0];
+    speed = [15; 15];
     trajectory(egoVehicle, waypoints, speed);
 end

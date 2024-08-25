@@ -86,7 +86,10 @@ end
 function riskOverlay(color)
     % riskOverlay Creates a rectangular patch as a risk overlay with specified color
     patch([-5 5 5 -5], [-5 -5 5 5], color, 'FaceAlpha', 0.2, 'EdgeColor', 'none');
+    % Add label for classification
+    text(0, 0, 'Classification', 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'FontSize', 12, 'Color', 'k');
 end
+
 
 function sensor = createSensor(scenario)
     % createSensors Returns all sensor objects to generate detections

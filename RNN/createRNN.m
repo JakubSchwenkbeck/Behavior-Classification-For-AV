@@ -1,129 +1,135 @@
-function net = createRNN(features,allLabels)
-[XTrain,YTrain] = createTrainingsData(features,allLabels);
+function net = createRNN(features, allLabels)
+    % createRNN - Creates, configures, and trains an RNN using LSTM for sequence classification.
+    %
+    % Syntax: net = createRNN(features, allLabels)
+    %
+    % Inputs:
+    %   features  - Cell array containing the input feature sequences for training.
+    %   allLabels - Cell array containing the corresponding labels for each feature sequence.
+    %
+    % Outputs:
+    %   net - The trained recurrent neural network model.
+    %
+    % Example:
+    %   net = createRNN(features, allLabels);
 
-layers = createModel(YTrain,XTrain);
+    % Prepare the training data
+    [XTrain, YTrain] = createTrainingsData(features, allLabels);
 
-options = createTrainingOptions;
+    % Create the RNN layers/model
+    layers = createModel(YTrain, XTrain);
 
-net = trainModel(XTrain, YTrain, layers, options);
+    % Set the training options
+    options = createTrainingOptions;
 
-
+    % Train the RNN model
+    net = trainModel(XTrain, YTrain, layers, options);
 end
 
 function [XTrain, YTrain] = createTrainingsData(allFeatures, allLabels)
+    % createTrainingsData - Prepares the input data and labels for RNN training.
+    %
+    % Syntax: [XTrain, YTrain] = createTrainingsData(allFeatures, allLabels)
+    %
+    % Inputs:
+    %   allFeatures - Cell array of input feature sequences.
+    %   allLabels   - Cell array of corresponding labels.
+    %
+    % Outputs:
+    %   XTrain - Cell array of transposed feature sequences.
+    %   YTrain - Cell array of categorical label sequences.
 
-for i = 1:size (allFeatures)
-XTrain{i} =  allFeatures{i}';
+    % Initialize cell arrays for training data
+    XTrain = cell(size(allFeatures));
+    YTrain = cell(size(allLabels));
 
-YTrain{i} = categorical(allLabels{i});
+    % Loop through each sequence
+    for i = 1:numel(allFeatures)
+        XTrain{i} = allFeatures{i}';  % Transpose features to match input format
+        YTrain{i} = categorical(allLabels{i});  % Convert labels to categorical format
+    end
 end
 
-  
-  %   numSequences = numel(allFeatures);
-  %   XTrain = cell(numSequences, 1);
-  %   YTrain = cell(numSequences, 1);
-  % 
-  %   % Determine the maximum number of time steps across all sequences
-  %   maxTimeSteps = max(cellfun(@(x) size(x, 1), allFeatures));
-  % 
-  %   % Collect unique categories across all labels
-  %   % allCategories = [];
-  %   % for i = 1:numSequences
-  %   %     allCategories = [allCategories; double(allLabels{i})]; % Convert categorical to numeric
-  %   % end
-  % %  uniqueCategories = unique(allCategories);
-  % 
-  %   for i = 1:numSequences
-  %       features = allFeatures{i};
-  %       labels = allLabels{i};
-  % 
-  %       numTimeSteps = size(features, 1);
-  %       numFeatures = size(features, 2);
-  % 
-  %       % Pad features and labels to ensure all sequences have the same length
-  %       if numTimeSteps < maxTimeSteps
-  %           padSize = maxTimeSteps - numTimeSteps;
-  % 
-  %           % Pad features with NaNs
-  %           features = [features; nan(padSize, numFeatures)];
-  % 
-  %           % Pad labels
-  %           labelsNumeric = double(labels); % Convert categorical to numeric
-  %           labelsNumeric = [labelsNumeric; nan(padSize, 1)];
-  %           labels = all % Convert back to categorical
-  %       end
-  % 
-  %       % Convert to cell array format for training
-  %       XTrain{i} = num2cell(features, 2)'; % Transpose to have time steps as rows
-  %       YTrain{i} = labels'; % Transpose labels to match the time steps
-  %   end
-end
+function layers = createModel(YTrain, features)
+    % createModel - Defines the architecture of the RNN model.
+    %
+    % Syntax: layers = createModel(YTrain, features)
+    %
+    % Inputs:
+    %   YTrain   - Cell array of categorical label sequences.
+    %   features - Cell array of input feature sequences (not used directly).
+    %
+    % Outputs:
+    %   layers - Array defining the layers of the RNN.
 
+    % Model parameters
+    numHiddenUnits = 100;  % Number of hidden units in the LSTM layer
+    numFeatures = 6 * 12;  % Number of input features (assumed to be 6 features over 12 time steps)
 
-function layers = createModel(YTrain,features)
-% Modelparameter
-numHiddenUnits = 100; % num of hidden units in LSTM
-% Concatenate all arrays in YTrain into one array
+    % Determine the number of unique output classes from the training labels
+    allValues = [YTrain{:}];
+    uniqueValues = unique(allValues);
+    numUniqueValues = numel(uniqueValues);
 
-
-allValues = [YTrain{:}];
-
-% Find the unique values in the concatenated array
-uniqueValues = unique(allValues);
-
-% Determine the number of unique values
-numUniqueValues = numel(uniqueValues);
-
-numFeatures = 6*12; % num of feats
-
-% RNN-Model
-layers = [ ...
-    sequenceInputLayer(numFeatures) % input layer, dimensions of features
-    lstmLayer(numHiddenUnits, 'OutputMode', 'sequence') % First LSTM-layer
-    dropoutLayer(0.2) % Dropout with 20% rate
-    fullyConnectedLayer(numUniqueValues) % fully connected layer
-    softmaxLayer % Softmax-layer for classification
-    classificationLayer]; % classification layer
+    % Define the RNN model layers
+    layers = [
+        sequenceInputLayer(numFeatures)  % Input layer, with dimensions of features
+        lstmLayer(numHiddenUnits, 'OutputMode', 'sequence')  % First LSTM layer
+        dropoutLayer(0.2)  % Dropout layer with 20% rate
+        fullyConnectedLayer(numUniqueValues)  % Fully connected layer
+        softmaxLayer  % Softmax layer for classification
+        classificationLayer  % Classification output layer
+    ];
 end
 
 function options = createTrainingOptions
+    % createTrainingOptions - Configures the training options for the RNN.
+    %
+    % Syntax: options = createTrainingOptions
+    %
+    % Outputs:
+    %   options - Struct containing the training options.
 
-options = trainingOptions('adam', ...
-    'MaxEpochs', 2500, ...
-    'InitialLearnRate', 1e-3, ... % Try reducing this value
-    'MiniBatchSize', 32, ...
-    'Shuffle', 'every-epoch', ...
-    'ValidationFrequency', 50, ...
-    'Verbose', false, ...
-    'Plots', 'training-progress');
+    options = trainingOptions('adam', ...
+        'MaxEpochs', 2500, ...
+        'InitialLearnRate', 1e-3, ...  % Learning rate
+        'MiniBatchSize', 32, ...
+        'Shuffle', 'every-epoch', ...
+        'ValidationFrequency', 50, ...
+        'Verbose', false, ...
+        'Plots', 'training-progress');
 end
-
 
 function net = trainModel(XTrain, YTrain, layers, options)
-[~,x] =size(XTrain);
-disp(x + " DataSets for Training");
+    % trainModel - Trains the RNN model using the specified data, layers, and options.
+    %
+    % Syntax: net = trainModel(XTrain, YTrain, layers, options)
+    %
+    % Inputs:
+    %   XTrain  - Cell array of input feature sequences.
+    %   YTrain  - Cell array of categorical label sequences.
+    %   layers  - Array defining the layers of the RNN.
+    %   options - Struct containing the training options.
+    %
+    % Outputs:
+    %   net - The trained recurrent neural network model.
 
-for i = 1:x
-[~,z ] =size(XTrain{i});
-[~,y ] =size(YTrain{i});
+    % Display the number of datasets for training
+    [~, x] = size(XTrain);
+    disp(x + " DataSets for Training");
 
-    % disp("XTrain nr "+i + "  " + z)
-    % disp("YTrain nr "+i + "  " + y)
+    % Check for matching sizes between input features and labels
+    for i = 1:x
+        [~, z] = size(XTrain{i});
+        [~, y] = size(YTrain{i});
 
-    if(z ~= y)
-        disp("not matching at " + i);
- disp("XTrain nr "+i + "  " + z)
-    disp("YTrain nr "+i + "  " + y)
-
+        if z ~= y
+            disp("Mismatch at sequence " + i);
+            disp("XTrain sequence " + i + " has size " + z);
+            disp("YTrain sequence " + i + " has size " + y);
+        end
     end
+
+    % Train the model using the specified layers and options
+    net = trainNetwork(XTrain, YTrain, layers, options);
 end
- 
-    %layers = createModel(XTrain{1});
-% training model
-net = trainNetwork(XTrain, YTrain, layers, options);
-
-
-
-
-end
-

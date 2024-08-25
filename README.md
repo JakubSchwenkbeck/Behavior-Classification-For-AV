@@ -3,7 +3,8 @@
 
 Welcome to the **Behavior Classificator for Autonomous Vehicles** project! This project is part of the **Matlab-Simulink Challenge** and focuses on classifying object behavior and assessing the risk it poses to autonomous vehicles. The project leverages MATLAB and Simulink to create a robust model for autonomous driving scenarios.
 
-![DataVisualization](https://github.com/user-attachments/assets/cdd6de8c-3c24-4d7a-b106-c87d6dfe2f8d)
+![VisualData](https://github.com/user-attachments/assets/bfd22392-e0c2-414f-be75-7d11b05dc627)
+
 
 ## Table of Contents
 - [Overview](#overview)

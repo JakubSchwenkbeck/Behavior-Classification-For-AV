@@ -1,9 +1,6 @@
-function [allData, scenario, sensor] = Visualization(RiskArray)
+function [allData, scenario, sensor] = TestScenarioForVisualization(RiskArray)
     % TestScenarioForVisualization - Returns sensor detections and includes
     % a visualization overlay that represents risk levels.
-
-    % Initialize RiskArray for demonstration (replace with actual data)
-   % RiskArray = rand(1, 100); % Placeholder: Random risk values between 0 and 1
 
     % Create the drivingScenario object and ego car
     [scenario, egoVehicle] = createDrivingScenario();
@@ -17,6 +14,16 @@ function [allData, scenario, sensor] = Visualization(RiskArray)
 
     % Plot the scenario for the first time
     plot(scenario);
+
+    % Map categorical values in RiskArray to numeric values
+    riskLevels = categories(RiskArray); % Get the unique categories
+    numericRiskArray = zeros(size(RiskArray)); % Initialize numeric array
+
+    % Define a mapping from categorical levels to numeric values (0 to 1)
+    for i = 1:length(riskLevels)
+        % Assume that riskLevels are ordered from low to high risk
+        numericRiskArray(RiskArray == riskLevels{i}) = (i-1) / (length(riskLevels) - 1);
+    end
 
     % Loop to update scenario and visualization
     allData = struct('Time', {}, 'ActorPoses', {}, 'ObjectDetections', {}, 'LaneDetections', {}, 'PointClouds', {}, 'INSMeasurements', {});
@@ -54,8 +61,8 @@ function [allData, scenario, sensor] = Visualization(RiskArray)
         running = advance(scenario);
 
         % Update the risk visualization
-        if riskIndex <= length(RiskArray)
-            currentRisk = RiskArray(riskIndex);
+        if riskIndex <= length(numericRiskArray)
+            currentRisk = numericRiskArray(riskIndex);
             color = [1-currentRisk, currentRisk, 0]; % Green to Red gradient
             riskOverlay(color);
             riskIndex = riskIndex + 1;

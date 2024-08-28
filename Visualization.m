@@ -55,46 +55,123 @@ function [allData, scenario, sensor] = TestScenarioForVisualization(RiskArray)
     riskIndex = 1;
 
     % Main loop to simulate the scenario and update the visualization
-    while running
-        % Generate the target poses of all actors relative to the ego vehicle
-        poses = targetPoses(egoVehicle);
-        time  = scenario.SimulationTime;
+    % Initialize handle arrays for pedestrian circles
+circleHandles = [];
 
-        % Generate detections from the sensor
-        laneDetections = [];
-        objectDetections = [];
-        insMeas = [];
-        if sensor.HasRoadsInputPort
-            rdmesh = roadMesh(egoVehicle, min(500, sensor.MaxRange));
-            [ptClouds, isValidPointCloudTime] = sensor(poses, rdmesh, time);
-        else
-            [ptClouds, isValidPointCloudTime] = sensor(poses, time);
-        end
+% Loop to process each time step
+while running
+    % Generate the target poses of all actors relative to the ego vehicle
+    poses = targetPoses(egoVehicle);
+    time  = scenario.SimulationTime;
 
-        % Aggregate and store detection data
-        if isValidPointCloudTime
-            allData(end + 1) = struct( ...
-                'Time', scenario.SimulationTime, ...
-                'ActorPoses', actorPoses(scenario), ...
-                'ObjectDetections', {objectDetections}, ...
-                'LaneDetections', {laneDetections}, ...
-                'PointClouds', {ptClouds}, ...
-                'INSMeasurements', {insMeas});
-        end
-
-        % Advance the scenario one time step; exit if scenario is complete
-        running = advance(scenario);
-
-        % Update the risk visualization
-        if riskIndex <= length(numericRiskArray)
-            currentRisk = numericRiskArray(riskIndex);
-           previousHandles= riskOverlay(currentRisk,previousHandles);
-            riskIndex = riskIndex + 1;
-        end
-
-        % Pause to sync visualization with the scenario simulation
-        pause(0.1); % Adjust to match simulation time step
+    % Generate detections from the sensor
+    laneDetections = [];
+    objectDetections = [];
+    insMeas = [];
+    if sensor.HasRoadsInputPort
+        rdmesh = roadMesh(egoVehicle, min(500, sensor.MaxRange));
+        [ptClouds, isValidPointCloudTime] = sensor(poses, rdmesh, time);
+    else
+        [ptClouds, isValidPointCloudTime] = sensor(poses, time);
     end
+
+    % Aggregate and store detection data
+    if isValidPointCloudTime
+        allData(end + 1) = struct( ...
+            'Time', scenario.SimulationTime, ...
+            'ActorPoses', actorPoses(scenario), ...
+            'ObjectDetections', {objectDetections}, ...
+            'LaneDetections', {laneDetections}, ...
+            'PointClouds', {ptClouds}, ...
+            'INSMeasurements', {insMeas});
+    end
+
+    % Update the risk visualization
+    if riskIndex <= length(numericRiskArray)
+        currentRisk = numericRiskArray(riskIndex);
+
+        % Update existing circles or create new ones
+        for idx = 1:numel(circleHandles)
+            if isvalid(circleHandles(idx))
+                delete(circleHandles(idx));
+            end
+        end
+        circleHandles = [];
+        
+        % Draw new circles for each pedestrian
+        pedestrianPoses = getPedestrianPoses(scenario); % You need to implement this function
+        
+        for p = 1:size(pedestrianPoses, 1)
+            pedestrianPos = pedestrianPoses(p, :);
+            % Choose circle color based on risk
+            color = riskToColor(currentRisk);
+            
+            % Draw circle on Y = 0 plane
+            theta = linspace(0, 2*pi, 100);
+            x = 1 * cos(theta); % Radius of the circle
+            y = 1 * sin(theta); % Radius of the circle
+            z = zeros(size(theta)); % Z = 0 for the plane
+
+            % Update or create circle plot
+            hold on;
+            circleHandles(p) = plot3(pedestrianPos(1) + x, pedestrianPos(2) + y, 0 * z, 'Color', color, 'LineWidth', 2);
+        end
+
+        previousHandles = riskOverlay(currentRisk, previousHandles);
+        riskIndex = riskIndex + 1;
+    end
+
+    % Advance the scenario one time step; exit if scenario is complete
+    running = advance(scenario);
+
+    % Pause to sync visualization with the scenario simulation
+    pause(0.1); % Adjust to match simulation time step
+end
+
+function color = riskToColor(risk)
+    % Maps risk level to color
+    % Risk levels: 0 = No risk, 0.3 = Low risk, 0.5 = Moderate risk, 0.7 = High risk, 1 = Very high risk
+    if risk >= 0.7
+        color = 'r'; % Red for high risk
+    elseif risk >= 0.5
+        color = 'orange'; % Orange for moderate risk
+    elseif risk >= 0.3
+        color = 'yellow'; % Yellow for low risk
+    else
+        color = 'g'; % Green for no risk
+    end
+end
+function pedestrianPoses = getPedestrianPoses(scenario)
+    % getPedestrianPoses - Retrieves the positions of all pedestrians in the scenario.
+    %
+    % Args:
+    %   scenario - The driving scenario object.
+    %
+    % Returns:
+    %   pedestrianPoses - A matrix where each row represents a pedestrian's position [x, y].
+    
+    % Initialize an empty array to store pedestrian positions
+    pedestrianPoses = [];
+    
+    % Get all actors in the scenario
+    actors = scenario.Actors;
+    
+    % Loop through all actors
+    for i = 1:length(actors)
+        actor = actors(i);
+        
+        % Check if the actor is a pedestrian
+        if isa(actor, 'matlab.driving.scenario.Pedestrian')
+            % Get the actor's position
+            position = actor.Position;
+            
+            % Append the position to the array
+            pedestrianPoses = [pedestrianPoses; position];
+        end
+    end
+end
+
+
 
     % Restart the scenario to reset actor positions
     restart(scenario);
@@ -137,7 +214,7 @@ function previousHandles =riskOverlay(currentRisk,previousHandles)
         'VerticalAlignment', 'middle', 'FontSize', 12, 'Color', 'k');
 
     % Add label with the classification risk level
-    riskText = text(-2, 0, " The current Risk level is:" + num2str(currentRisk * 100) + "% ", ...
+    riskText = text(-2, 0, " The current Risk level is:" + num2str((currentRisk * 100)) + "% ", ...
         'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', ...
         'FontSize', 10, 'Color', 'k');
 

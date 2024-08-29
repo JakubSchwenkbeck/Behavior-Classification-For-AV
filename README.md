@@ -84,6 +84,7 @@ This project demonstrated the effectiveness of using RNNs for classifying object
 ### Future Enhancements:
 - **Real-World Testing:** Integrate real-world data to further validate the model.
 - **Model Optimization:** Explore different architectures and hyperparameters to enhance model accuracy and efficiency.
+- **Enhanced features:** Make Movement Predictions and classify Objects, e.g. using [My Own AI Model](https://github.com/JakubSchwenkbeck/Object-Recognition-Prediction)
 - **Deployment:** Develop methods for deploying the trained model in real-time autonomous systems.
 
 ## Getting Started

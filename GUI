@@ -1,0 +1,70 @@
+function GUI
+    % GUI - Creates a graphical user interface for the Main function.
+    % 
+    % This GUI allows the user to load data, train a model, and visualize
+    % the results using the buttons provided.
+
+    % Create the main figure window
+    fig = uifigure('Name', 'AV Classifier GUI', 'Position', [100 100 500 400]);
+
+    % Add a title label
+    uilabel(fig, 'Text', 'Autonomous Vehicle Risk Classifier', ...
+        'Position', [50 340 400 40], 'FontSize', 18, 'FontWeight', 'bold');
+
+    % Button to load data
+    loadDataBtn = uibutton(fig, 'push', ...
+        'Text', 'Load Data', ...
+        'Position', [150 250 200 40], ...
+        'ButtonPushedFcn', @(btn,event) loadDataCallback());
+
+    % Button to train the model
+    trainModelBtn = uibutton(fig, 'push', ...
+        'Text', 'Train Model', ...
+        'Position', [150 180 200 40], ...
+        'ButtonPushedFcn', @(btn,event) trainModelCallback());
+
+    % Button to visualize the model
+    visualizeBtn = uibutton(fig, 'push', ...
+        'Text', 'Visualize Model', ...
+        'Position', [150 110 200 40], ...
+        'ButtonPushedFcn', @(btn,event) visualizeModelCallback());
+
+    % Button for using a pretrained model (no callback for this one)
+    usePretrainedBtn = uibutton(fig, 'push', ...
+        'Text', 'Use Pretrained Model', ...
+        'Position', [150 40 200 40]);
+
+    % Callback for loading data
+    function loadDataCallback()
+        % Load the data by calling loadAllData from the Main function
+        folderPath = uigetdir('C:\', 'Select Sensor Data Folder');
+        if folderPath ~= 0
+            [dataSize, allData] = loadAllData(folderPath);
+            uialert(fig, ['Loaded ' num2str(dataSize) ' files from ' folderPath], 'Data Loaded');
+        end
+    end
+
+    % Callback for training the model
+    function trainModelCallback()
+        % Load data first if not already loaded
+        if ~exist('allData', 'var') || isempty(allData)
+            uialert(fig, 'Please load data before training the model.', 'Error');
+            return;
+        end
+        labels = createLabels(2, length(allData));
+        net = createRNN(allData, labels);
+        uialert(fig, 'Model training completed.', 'Training Done');
+    end
+
+    % Callback for visualizing the model
+    function visualizeModelCallback()
+        % Load test data and visualize the model results
+        filename = "VisualData.mat";
+        if ~exist('net', 'var')
+            uialert(fig, 'Please train the model before visualizing.', 'Error');
+            return;
+        end
+        RiskArray = testRNN(net, filename);
+        Visualization(RiskArray);
+    end
+end

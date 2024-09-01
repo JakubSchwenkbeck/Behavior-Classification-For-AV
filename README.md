@@ -13,6 +13,7 @@ Welcome to the **Behavior Classificator for Autonomous Vehicles** project! This 
   - [RNN Setup](#rnn-setup)
   - [Training and Data](#training-and-data)
 - [Results](#results)
+- [Additons](#Additions)
 - [Conclusion](#conclusion)
 - [Getting Started](#getting-started)
 - [License](#license)
@@ -69,6 +70,13 @@ end
 The initial testing of the RNN model shows high accuracy in classifying object behavior, with results ranging between 95% and 99%. 
 
 <p align="center"> <img src="https://github.com/user-attachments/assets/0e56a7cd-e740-48a7-97cb-cccf3f8dfc70" alt="Training Progress" width="800"/> </p>
+
+
+
+## Additions
+
+With the selfwritten Model in Java and an selfwritten JavaMatlab interface, the Object Recognition model from java could get visual input from the car to help enhance the object risk classification with additonal data such as labels or movement predictions
+
 
 ## Conclusion
 

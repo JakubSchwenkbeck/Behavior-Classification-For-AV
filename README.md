@@ -3,8 +3,7 @@
 
 Welcome to the **Behavior Classificator for Autonomous Vehicles** project! This project is part of the [**Matlab-Simulink Challenge**](https://github.com/mathworks/MATLAB-Simulink-Challenge-Project-Hub) and focuses on classifying object behavior and assessing the risk it poses to autonomous vehicles. The project leverages MATLAB and Simulink to create a robust model for autonomous driving scenarios.
 
-![VisualData](https://github.com/user-attachments/assets/bfd22392-e0c2-414f-be75-7d11b05dc627)
-
+<p align="center"> <img src="https://github.com/user-attachments/assets/bfd22392-e0c2-414f-be75-7d11b05dc627" alt="Visual Data" width="600"/> </p>
 
 ## Table of Contents
 - [Overview](#overview)
@@ -69,8 +68,7 @@ end
 
 The initial testing of the RNN model shows high accuracy in classifying object behavior, with results ranging between 95% and 99%. 
 
-![Training Progress](https://github.com/user-attachments/assets/0e56a7cd-e740-48a7-97cb-cccf3f8dfc70)
-
+<p align="center"> <img src="https://github.com/user-attachments/assets/0e56a7cd-e740-48a7-97cb-cccf3f8dfc70" alt="Training Progress" width="800"/> </p>
 
 ## Conclusion
 

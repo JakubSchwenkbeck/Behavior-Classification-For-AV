@@ -93,4 +93,5 @@ function rotatedSample = rotateData(sample)
     else
         rotatedSample = sample; % No rotation applied if data is not 2D
     end
+    
 end

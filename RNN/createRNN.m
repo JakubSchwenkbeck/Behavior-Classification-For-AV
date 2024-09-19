@@ -132,4 +132,8 @@ function net = trainModel(XTrain, YTrain, layers, options)
 
     % Train the model using the specified layers and options
     net = trainNetwork(XTrain, YTrain, layers, options);
+
+    % After training the RNN model
+    %exportTrainedModel(net, 'models/trainedRNNModel.mat');
+
 end

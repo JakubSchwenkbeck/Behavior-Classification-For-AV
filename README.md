@@ -9,12 +9,6 @@ Welcome to the **Behavior Classificator for Autonomous Vehicles** project! This 
 - [Overview](#overview)
 - [About Me](#about-me)
 - [Workflow](#workflow)
-  - [Setup](#first-setup)
-  - [Data Understanding](#data-understanding)
-  - [Model](#model)
-  - [RNN Setup](#rnn-setup)
-  - [Training and Data](#training-and-data)
-- [Results](#results)
 - [Additons](#additions)
 - [Conclusion](#conclusion)
 - [Getting Started](#getting-started)
@@ -32,59 +26,80 @@ I chose this particular project because, not only am I interested and enthusiast
 ## Workflow
 
 
-### First Setup
+## 1. **First Setup**
+To begin this project, I created a MATLAB project, initialized a Git repository, and connected it to this remote repository. I used the Automated Driving Toolbox™ and Deep Learning Toolbox™ to build, simulate, and train models.
 
-To start this Project, I setup a new Matlab Project, initialized a git Repo  and connected it with this Remote Repository. I used the Automated Driving Toolbox™ and the Deep Learning Toolbox™ from Matlab. 
+### **Required Toolboxes:**
+- **Automated Driving Toolbox™**
+- **Deep Learning Toolbox™**
 
-### Data Understanding
+## 2. **Data Understanding & Transformation**
+### Scene Creation:
+The Scenario Designer from the Automated Driving Toolbox™ was used to create driving scenarios, including traffic, pedestrians, and different driving behaviors.
+### Data Transformation:
+- **preprocessSensorData.m**: A custom script to clean and preprocess sensor data, including noise reduction and handling missing data.
+- **dataAugmentation.m**: Data augmentation was applied to expand the training dataset by simulating variations in lighting, weather, and sensor noise.
+  
+## 3. **Model**
+### Model Selection:
+I chose an RNN to classify risky vs. safe behavior since it is ideal for processing sequences of time-series data and can capture temporal dependencies in object behavior.
 
-1. **Scene Creation:** Used the Scenario Designer from the Autonomous Driving Toolbox (ADT) to create initial scenes.
-2. **Signal Data Extraction:** Extracted signal data from the scenes and analyzed the data structure.
-3. **Preprocessing:** Developed functions to preprocess the data, including noise reduction, filling missing values, and concatenating data into a unified matrix.
+### RNN Setup:
+- **createRNN.m**: Contains the implementation of the RNN model using LSTM layers for time-series classification.
+- **createLabels.m**: Function to generate appropriate labels (safe/risky) for the training data.
+Here’s the structure of the RNN:
 
-[Dropbox Link for small Dataset](https://www.dropbox.com/scl/fo/u1n1o0anct4c4yhb6cblb/AFp1VxLP_zYPJmahg9-xAUE?rlkey=crsaqf5a2vtgbr6xyoeei3vce&st=2l8q9n7a&dl=0)
+```matlab 
 
-### Model
-
-1. **Model Selection:** Chose a Recurrent Neural Network (RNN) suitable for time-series data.
-   - **Why RNNs?** RNNs are particularly suitable for this project because they are designed to process sequences of data, making them ideal for understanding temporal dependencies in time-series data such as the behavior of objects in autonomous driving scenarios. MATLAB's deep learning toolbox provides efficient tools for designing, training, and evaluating RNNs, making it a strong choice for this application.
-
-### RNN Setup
-
-1. **Revised RNN:**
-
-```matlab
 layers = [
-    sequenceInputLayer(numFeatures) % Input layer, dimensions of features
-    lstmLayer(numHiddenUnits, 'OutputMode', 'sequence') % LSTM layer
-    dropoutLayer(0.2) % Dropout layer with 20% rate
-    fullyConnectedLayer(numUniqueValues) % Fully connected layer
-    softmaxLayer % Softmax layer for classification
-    classificationLayer]; % Classification layer
-end
+    sequenceInputLayer(numFeatures)
+    lstmLayer(numHiddenUnits, 'OutputMode', 'sequence')
+    dropoutLayer(0.2)
+    fullyConnectedLayer(numUniqueValues)
+    softmaxLayer
+    classificationLayer];
+Training Options:
+```
+```matlab
 
 options = trainingOptions('adam', ...
     'MaxEpochs', 2500, ...
-    'InitialLearnRate', 1e-3, ... % Adjusting learn rate for better convergence
+    'InitialLearnRate', 1e-3, ...
     'MiniBatchSize', 32, ...
     'Shuffle', 'every-epoch', ...
     'ValidationFrequency', 50, ...
     'Verbose', false, ...
     'Plots', 'training-progress');
-end
 ```
+### Training:
+- **trainRNN.m**: The RNN is trained with a dataset of vehicle and pedestrian trajectories labeled as safe or risky.
+The training achieved an accuracy of 95%-99% in classifying behaviors.
 
-### Training and Data
+## 4. **Scenario Simulation and Evaluation**
+### Scenario Creation:
+- **createScenarios.m**: Automates the process of generating different driving scenarios involving various pedestrian and vehicle behaviors.
+- **TestScenario for visualization.mat**: This file contains a specific scenario used to test and visualize model performance.
+### Evaluation:
+- **evalModel.m**: Evaluates the RNN's performance by predicting object behavior and comparing it to the ground truth.
+- **generateConfusionMatrix.m**: Generates a confusion matrix to visualize the classification performance across different scenarios.
+- **exportTrainedModel.m**: Exports the trained RNN model for future use or deployment.
+### Risk Prediction:
+- **predictRiskOnNewData.m**: After training, this script uses the RNN model to predict the risk level of new sensor data in real-time.
+- 
+## 5. **Visualization**
+- **Visualization Folder**: Contains various visualizations related to scenario testing, including 2D and 3D representations of object trajectories and behaviors.
+- **Main.m**: Main entry point to run the project, visualize results, and interact with the GUI.
+- **GUI.m**: A custom GUI for interacting with the project’s scenarios, results, and predictions.
+  
+## 6. **Integration with Java Interface**
+### Java-Matlab Interface:
+I extended the project by integrating a JavaInterface to connect a Model that performs object recognition. The integration between MATLAB and Java enhances the object risk classification model by incorporating visual input directly from the vehicle’s sensors.
 
-1. **Structured Approach:** Implemented a structured approach to data retrieval and labeling.
-2. **Model Performance:** The RNN achieved an accuracy of 95% to 99% with initial scenarios.
-
-## Results
-
-The initial testing of the RNN model shows high accuracy in classifying object behavior, with results ranging between 95% and 99%. 
+- **LoadJavaModel.m**: A script Interface to load the Java-based object recognition model into MATLAB. The object recognition model assists in identifying and tracking objects visually, which adds another layer of risk prediction based on labels, shapes, or movement predictions from the Java model.
+## 7. **Results**
+The RNN model achieved an accuracy ranging between 95% and 99% when tested on various driving scenarios. The confusion matrix generated after testing shows that the model is highly effective at distinguishing between safe and risky behaviors.
 
 <p align="center"> <img src="https://github.com/user-attachments/assets/0e56a7cd-e740-48a7-97cb-cccf3f8dfc70" alt="Training Progress" width="800"/> </p>
-
 
 
 ## Additions
@@ -114,11 +129,24 @@ To get started with this project:
 1. **Clone the Repository:**
    `git clone https://github.com/JakubSchwenkbeck/Behavior-Classification-For-AV/.git`
 2. **Navigate to the Project Directory:**
-   `cd behavior-classificator`
-3. **Run the Model:** Follow the instructions in the `scripts` directory to set up and run the model.
+   `cd Behavior-Classification-For-AV`
+3. **Download a small Dataset**
+   [Dropbox Link](https://www.dropbox.com/scl/fo/u1n1o0anct4c4yhb6cblb/AFp1VxLP_zYPJmahg9-xAUE?rlkey=crsaqf5a2vtgbr6xyoeei3vce&st=032cfis8&dl=0)
+4. **Run the Model:** `Go to the Main.m Function,which is the Main entry point`.
 
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+
+
+
+
+
+
+
+
+
+
 
 

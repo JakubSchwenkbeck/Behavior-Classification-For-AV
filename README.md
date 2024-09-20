@@ -102,7 +102,7 @@ I extended the project by integrating a JavaInterface to connect a Model that pe
 ## 7. **Results**
 The RNN model achieved an accuracy ranging between 95% and 99% when tested on various driving scenarios. The confusion matrix generated after testing shows that the model is highly effective at distinguishing between safe and risky behaviors.
 
-<p align="center"> <img src="https://github.com/user-attachments/assets/0e56a7cd-e740-48a7-97cb-cccf3f8dfc70" alt="Training Progress" width="800"/> </p>
+<p align="center"> <img src="https://github.com/user-attachments/assets/e1ce36d4-42f5-4251-9ed3-69531c12b6ef" alt="Training Progress" width="800"/> </p>
 
 
 ## Additions

@@ -16,10 +16,11 @@ function Main
     % No inputs are required for this function.
 
     % Load all preprocessed LiDAR sensor data
-    [dataSize, data] = loadAllData("C:\Users\jakub\OneDrive\Dokumente\MATLAB\AV-Classifier\SensorData");
+    %% ADJUST TO YOUR PATH
+    [dataSize, data] = loadAllData("...MATLAB\AV-Classifier\SensorData");
 
     % Generate labels for the dataset (e.g., binary classification: 0 - Not Risky, 1 - Risky)
-    labels = createLabels(2, dataSize);
+    labels = createLabels(2, dataSize); % THESE LABELS ARE TAILORED TO THE DATASET PROVIDED
 
     % Create and train the RNN model
     net = createRNN(data, labels);

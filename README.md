@@ -8,12 +8,13 @@ Welcome to the **Behavior Classificator for Autonomous Vehicles** project! This 
 ## Table of Contents
 - [Overview](#overview)
 - [Workflow](#workflow)
+  - [Setup](#first-setup)
   - [Data Understanding](#data-understanding)
   - [Model](#model)
   - [RNN Setup](#rnn-setup)
   - [Training and Data](#training-and-data)
 - [Results](#results)
-- [Additons](#Additions)
+- [Additons](#additions)
 - [Conclusion](#conclusion)
 - [Getting Started](#getting-started)
 - [License](#license)
@@ -23,6 +24,11 @@ Welcome to the **Behavior Classificator for Autonomous Vehicles** project! This 
 The project aims to classify the behavior of objects within autonomous driving scenarios using a Recurrent Neural Network (RNN). The goal is to understand the behavior of objects and predict their risk level, which is crucial for the safe operation of autonomous vehicles.
 
 ## Workflow
+
+
+### First Setup
+
+To start this Project, I setup a new Matlab Project, initialized a git Repo  and connected it with this Remote Repository. I used the Automated Driving Toolbox™ and the Deep Learning Toolbox™ from Matlab. 
 
 ### Data Understanding
 

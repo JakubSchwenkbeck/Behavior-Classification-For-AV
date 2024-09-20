@@ -15,7 +15,7 @@ function Labels = createLabels(numActor,Num)
  % 1 - crash
 
 
-
+%% This is just a small part of Scenarios, as I was alone and didn't have the time to create thousands of scenarios. I hope this still shows what the RNN will be capable of 
 
 
 %% LOAD ALL LABELS

@@ -8,6 +8,7 @@ function predictedLabels = testRNN(TrainedNet, filename)
     % Returns:
     %   predictedLabels (categorical): The labels predicted by the RNN for the input data.
     
+    %{
     % Define the folder path where the .mat file is located
     folderPath = "...\MATLAB\AV-Classifier"; % ADJUST TO YOUR PATH
     
@@ -16,12 +17,12 @@ function predictedLabels = testRNN(TrainedNet, filename)
     
     % Construct the full file path
     filePath = fullfile(folderPath, filename);
-    
+    %}
     % Load the .mat file into a structure
-    dataStruct = load(filePath);
+    dataStruct = load('Visualization\VisualData.mat');
     
     % Extract and preprocess the sensor data
-    data = preprocessSensorData(dataStruct.(filenameWithoutExtension));
+    data = preprocessSensorData(dataStruct.('VisualData'));
     
     % Classify the preprocessed data using the trained RNN
     predictedLabels = classify(TrainedNet, transpose(data));

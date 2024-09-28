@@ -88,8 +88,8 @@ while running
     if riskIndex <= length(numericRiskArray)
      
         currentRisk = numericRiskArray(riskIndex);
-           if mod(timecount, 9) == 0
-        disp(currentRisk)
+        if mod(timecount, 9) == 0
+        disp(" The current Risk : " + currentRisk)
         % Update existing circles or create new ones
         for idx = 1:numel(circleHandles)
             if isvalid(circleHandles(idx))
@@ -125,7 +125,7 @@ while running
     end
     
     % Set camera position and target for a 3D view from the side (left behind the car)
-camPos = egoVehicle.Position + [-35 -5 10];  % Camera is 15 units behind, 5 units to the left, and 5 units above the car
+camPos = egoVehicle.Position + [-20 -5 10];  % Camera is 15 units behind, 5 units to the left, and 5 units above the car
 camTarget = egoVehicle.Position + [10 0 0]; % Camera looks 10 units ahead of the car
 camva(60); % Field of view (adjust as necessary)
 campos(camPos); % Set camera position
@@ -186,12 +186,12 @@ function color = riskToColor(risk)
     % Maps risk level to color
     % Risk levels: 0 = No risk, 0.3 = Low risk, 0.5 = Moderate risk, 0.7 = High risk, 1 = Very high risk
  % Refined color selection based on risk level (continuous gradient)
-if risk >= 0.7
+if risk >= 0.6
     color = [1, (1 - risk) / 0.3, 0];  % Gradient from orange to red
 elseif risk >= 0.5
-    color = [1, (risk - 0.5) / 0.2, 0]; % Gradient from yellow to orange
-elseif risk >= 0.3
-    color = [1, 1, (risk - 0.3) / 0.2]; % Gradient from green to yellow
+    color = [1, (risk - 0.4) / 0.2, 0]; % Gradient from yellow to orange
+elseif risk >= 0.2
+    color = [1, 1, (risk - 0.2) / 0.2]; % Gradient from green to yellow
 else
     color = [0, 1, 0]; % Pure green for low risk
 end
@@ -219,14 +219,14 @@ function previousHandles =riskOverlay(currentRisk,previousHandles)
     % Define the color based on the current risk level
     color = riskToColor(currentRisk);
     % Create the overlay patch
-    patch([-10 10 10 -10], [-10 -10 10 10], color, 'FaceAlpha', 0.2, 'EdgeColor', 'none');
+    patch([-20 50 50 -20], [-20 -20 20 20], color, 'FaceAlpha', 0.2, 'EdgeColor', 'none');
 
     % Add label for classification in the center of the overlay
-    classificationText = text(6, 0, 'Classification', 'HorizontalAlignment', 'center', ...
+    classificationText = text(35, -12, 'Classification', 'HorizontalAlignment', 'center', ...
         'VerticalAlignment', 'middle', 'FontSize', 12, 'Color', 'k');
 
     % Add label with the classification risk level
-    riskText = text(-2, 0, " The current Risk level is:" + num2str((currentRisk * 100)) + "% ", ...
+    riskText = text(27, -16, " The current Risk level is:" + num2str((currentRisk * 100)) + "% ", ...
         'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', ...
         'FontSize', 10, 'Color', 'k');
 
@@ -296,13 +296,13 @@ function [scenario, egoVehicle] = createDrivingScenario
         'Length', 0.24, ...
         'Width', 0.45, ...
         'Height', 1.7, ...
-        'Position', [44.3 4.4 0], ...
+        'Position', [44.3 3.4 0], ...
         'RCSPattern', [-8 -8; -8 -8], ...
         'Mesh', driving.scenario.pedestrianMesh, ...
         'Name', 'Pedestrian1');
-    waypoints = [44.3 4.4 0;
-                 39.6 3.1 0];
-    speed = [1.5; 1.5];
+    waypoints = [44.3 3.9 0;
+                 39.6 2.7 0];
+    speed = [2; 2];
     trajectory(pedestrian1, waypoints, speed);
 
     % Add the ego vehicle

@@ -1,4 +1,7 @@
 function javaInterface()
+%% THIS IS AN ADDITION WHICH COULD BE IMPLEMENTED IN THE FUTURE (Java project not finished yet)
+
+
     % Add the Java JAR file to the MATLAB Java class path
     javaaddpath('path/to/the/JavaNeuralNetwork.jar');
 

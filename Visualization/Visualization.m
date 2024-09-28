@@ -37,16 +37,11 @@ function [allData, scenario, sensor] = TestScenarioForVisualization(RiskArray)
 
     % Initial plot of the scenario
     plot(scenario);
+% Convert categorical array to cell array of character vectors
+cellArray = cellstr(RiskArray);
 
-    % Map categorical values in RiskArray to numeric values between 0 and 1
-    riskLevels = categories(RiskArray); % Get unique risk categories
-    numericRiskArray = zeros(size(RiskArray)); % Initialize numeric array
-
-    % Define mapping from categorical risk levels to numeric values (0 to 1)
-    for i = 1:length(riskLevels)
-        % Assume risk levels are ordered from low to high risk
-        numericRiskArray(RiskArray == riskLevels{i}) = (i-1) / (length(riskLevels) - 1);
-    end
+% Convert the cell array of strings to a numeric array
+numericRiskArray = str2double(cellArray);
 
     % Initialize storage for sensor data and scenario information
     allData = struct('Time', {}, 'ActorPoses', {}, 'ObjectDetections', {}, ...
@@ -58,8 +53,11 @@ function [allData, scenario, sensor] = TestScenarioForVisualization(RiskArray)
     % Initialize handle arrays for pedestrian circles
 circleHandles = [];
 
+timecount = 0;
+
 % Loop to process each time step
 while running
+    timecount = timecount +1;
     % Generate the target poses of all actors relative to the ego vehicle
     poses = targetPoses(egoVehicle);
     time  = scenario.SimulationTime;
@@ -85,11 +83,13 @@ while running
             'PointClouds', {ptClouds}, ...
             'INSMeasurements', {insMeas});
     end
-
+    
     % Update the risk visualization
     if riskIndex <= length(numericRiskArray)
+     
         currentRisk = numericRiskArray(riskIndex);
-
+           if mod(timecount, 9) == 0
+        disp(currentRisk)
         % Update existing circles or create new ones
         for idx = 1:numel(circleHandles)
             if isvalid(circleHandles(idx))
@@ -117,9 +117,20 @@ while running
             circleHandles(p) = plot3(pedestrianPos(1) + x, pedestrianPos(2) + y, 0 * z, 'Color', color, 'LineWidth', 2);
         end
 
-        previousHandles = riskOverlay(currentRisk, previousHandles);
         riskIndex = riskIndex + 1;
+
+        end
+                        previousHandles = riskOverlay(currentRisk, previousHandles);
+
     end
+    
+    % Set camera position and target for a 3D view from the side (left behind the car)
+camPos = egoVehicle.Position + [-35 -5 10];  % Camera is 15 units behind, 5 units to the left, and 5 units above the car
+camTarget = egoVehicle.Position + [10 0 0]; % Camera looks 10 units ahead of the car
+camva(60); % Field of view (adjust as necessary)
+campos(camPos); % Set camera position
+camtarget(camTarget); % Set where the camera is looking
+
 
     % Advance the scenario one time step; exit if scenario is complete
     running = advance(scenario);
@@ -128,19 +139,7 @@ while running
     pause(0.1); % Adjust to match simulation time step
 end
 
-function color = riskToColor(risk)
-    % Maps risk level to color
-    % Risk levels: 0 = No risk, 0.3 = Low risk, 0.5 = Moderate risk, 0.7 = High risk, 1 = Very high risk
-    if risk >= 0.7
-        color = 'r'; % Red for high risk
-    elseif risk >= 0.5
-        color = 'orange'; % Orange for moderate risk
-    elseif risk >= 0.3
-        color = 'yellow'; % Yellow for low risk
-    else
-        color = 'g'; % Green for no risk
-    end
-end
+
 function pedestrianPoses = getPedestrianPoses(scenario)
     % getPedestrianPoses - Retrieves the positions of all pedestrians in the scenario.
     %
@@ -183,7 +182,21 @@ end
 %%%%%%%%%%%%%%%%%%%%
 % Helper functions %
 %%%%%%%%%%%%%%%%%%%%
+function color = riskToColor(risk)
+    % Maps risk level to color
+    % Risk levels: 0 = No risk, 0.3 = Low risk, 0.5 = Moderate risk, 0.7 = High risk, 1 = Very high risk
+ % Refined color selection based on risk level (continuous gradient)
+if risk >= 0.7
+    color = [1, (1 - risk) / 0.3, 0];  % Gradient from orange to red
+elseif risk >= 0.5
+    color = [1, (risk - 0.5) / 0.2, 0]; % Gradient from yellow to orange
+elseif risk >= 0.3
+    color = [1, 1, (risk - 0.3) / 0.2]; % Gradient from green to yellow
+else
+    color = [0, 1, 0]; % Pure green for low risk
+end
 
+end
 function previousHandles =riskOverlay(currentRisk,previousHandles)
     % riskOverlay - Adds a colored overlay representing risk level.
     %
@@ -204,13 +217,12 @@ function previousHandles =riskOverlay(currentRisk,previousHandles)
     end
 
     % Define the color based on the current risk level
-    color = [1-currentRisk, currentRisk, 0]; % Green to Red gradient
-
+    color = riskToColor(currentRisk);
     % Create the overlay patch
-    patch([-5 5 5 -5], [-5 -5 5 5], color, 'FaceAlpha', 0.2, 'EdgeColor', 'none');
+    patch([-10 10 10 -10], [-10 -10 10 10], color, 'FaceAlpha', 0.2, 'EdgeColor', 'none');
 
     % Add label for classification in the center of the overlay
-    classificationText = text(2, 0, 'Classification', 'HorizontalAlignment', 'center', ...
+    classificationText = text(6, 0, 'Classification', 'HorizontalAlignment', 'center', ...
         'VerticalAlignment', 'middle', 'FontSize', 12, 'Color', 'k');
 
     % Add label with the classification risk level

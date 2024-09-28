@@ -32,7 +32,7 @@ I chose this particular project because, not only am I interested and enthusiast
 ## 1. **First Setup**
 To begin this project, I created a MATLAB project, initialized a Git repository, and connected it to this remote repository. I used the Automated Driving Toolbox™ and Deep Learning Toolbox™ to build, simulate, and train models.
 
-### **Required Toolboxes:**
+### **Required Toolboxes: **
 - **Automated Driving Toolbox™**
 - **Deep Learning Toolbox™**
 

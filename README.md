@@ -133,9 +133,10 @@ To get started with this project:
    `git clone https://github.com/JakubSchwenkbeck/Behavior-Classification-For-AV.git`
 2. **Navigate to the Project Directory:**
    `cd Behavior-Classification-For-AV`
-3. **Download a small Dataset**
+3. **Run the Model:** `Go to the Main.m Function,which is the Main entry point. It can run out of the box (with the right Toolboxes;)`.
+   
+(4.   **Download a small Dataset** )
    [Dropbox Link](https://www.dropbox.com/scl/fo/u1n1o0anct4c4yhb6cblb/AFp1VxLP_zYPJmahg9-xAUE?rlkey=crsaqf5a2vtgbr6xyoeei3vce&st=032cfis8&dl=0)
-4. **Run the Model:** `Go to the Main.m Function,which is the Main entry point. It can run out of the box (with the right Toolboxes;)`.
 
 ## License
 

@@ -16,7 +16,8 @@ function Main
     % No inputs are required for this function.
 
     % Load all preprocessed LiDAR sensor data
-    %% ADJUST TO YOUR PATH
+    %{
+    %% UNCOMMENT FOR OWN TRAINING : ADJUST TO YOUR PATH
     [dataSize, data] = loadAllData("...MATLAB\AV-Classifier\SensorData");
 
     % Generate labels for the dataset (e.g., binary classification: 0 - Not Risky, 1 - Risky)
@@ -24,10 +25,14 @@ function Main
 
     % Create and train the RNN model
     net = createRNN(data, labels);
+    %}
+    loadedData = load('TrainedModel.mat');
+    net = loadedData.net;
 
+    
     % Define the filename for the testing dataset
     filename = "VisualData.mat";
-
+    
     % Test the trained RNN using the new dataset and get the risk classification
     RiskArray = testRNN(net, filename);
 

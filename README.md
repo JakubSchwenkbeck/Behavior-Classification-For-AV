@@ -88,7 +88,7 @@ The training achieved an accuracy of 95%-99% in classifying behaviors.
 - **exportTrainedModel.m**: Exports the trained RNN model for future use or deployment.
 ### Risk Prediction:
 - **predictRiskOnNewData.m**: After training, this script uses the RNN model to predict the risk level of new sensor data in real-time.
-- 
+
 ## 5. **Visualization**
 - **Visualization Folder**: Contains various visualizations related to scenario testing, including 2D and 3D representations of object trajectories and behaviors.
 - **Main.m**: Main entry point to run the project, visualize results, and interact with the GUI.

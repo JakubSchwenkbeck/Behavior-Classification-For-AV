@@ -130,7 +130,7 @@ This project demonstrated the effectiveness of using RNNs for classifying object
 To get started with this project:
 
 1. **Clone the Repository:**
-   `git clone https://github.com/JakubSchwenkbeck/Behavior-Classification-For-AV/.git`
+   `git clone https://github.com/JakubSchwenkbeck/Behavior-Classification-For-AV.git`
 2. **Navigate to the Project Directory:**
    `cd Behavior-Classification-For-AV`
 3. **Download a small Dataset**

@@ -4,6 +4,10 @@ function GUI
     % This GUI allows the user to load data, train a model, and visualize
     % the results using the buttons provided.
 
+    % Initialize variables for storing loaded data and the trained model
+    allData = [];
+    net = [];
+    
     % Create the main figure window with a nice background color and modern look
     fig = uifigure('Name', 'AV Classifier GUI', 'Position', [100 100 600 450], ...
                    'Color', [0.95 0.95 0.95]);
@@ -42,12 +46,13 @@ function GUI
         'BackgroundColor', [0.8 0.4 0.2], 'FontColor', 'white', ...
         'ButtonPushedFcn', @(btn,event) visualizeModelCallback());
 
-    % Button for using a pretrained model with modern styling (no callback)
+    % Button for using a pretrained model with modern styling
     usePretrainedBtn = uibutton(panel, 'push', ...
         'Text', 'Use Pretrained Model', ...
         'Position', [100 40 200 40], ...
         'FontSize', 14, 'FontWeight', 'bold', ...
-        'BackgroundColor', [0.6 0.2 0.8], 'FontColor', 'white');
+        'BackgroundColor', [0.6 0.2 0.8], 'FontColor', 'white', ...
+        'ButtonPushedFcn', @(btn,event) usePretrainedCallback());
 
     % Add a logo or image (optional, if you have an image file)
     try
@@ -61,32 +66,59 @@ function GUI
         % Load the data by calling loadAllData from the Main function
         folderPath = uigetdir('C:\', 'Select Sensor Data Folder');
         if folderPath ~= 0
-            [dataSize, allData] = loadAllData(folderPath);
-            uialert(fig, ['Loaded ' num2str(dataSize) ' files from ' folderPath], 'Data Loaded');
+            try
+                [dataSize, allData] = loadAllData(folderPath);
+                uialert(fig, ['Loaded ' num2str(dataSize) ' files from ' folderPath], 'Data Loaded');
+            catch ME
+                uialert(fig, 'Error loading data. Please check your folder and try again.', 'Load Error');
+                disp(ME.message);  % Display the error message for debugging
+            end
         end
     end
 
     % Callback for training the model
     function trainModelCallback()
         % Load data first if not already loaded
-        if ~exist('allData', 'var') || isempty(allData)
+        if isempty(allData)
             uialert(fig, 'Please load data before training the model.', 'Error');
             return;
         end
-        labels = createLabels(2, length(allData));
-        net = createRNN(allData, labels);
-        uialert(fig, 'Model training completed.', 'Training Done');
+        try
+            labels = createLabels(2, length(allData));
+            net = createRNN(allData, labels);
+            uialert(fig, 'Model training completed.', 'Training Done');
+        catch ME
+            uialert(fig, 'Error during model training. Please check the data.', 'Training Error');
+            disp(ME.message);  % Display the error message for debugging
+        end
     end
 
     % Callback for visualizing the model
     function visualizeModelCallback()
         % Load test data and visualize the model results
         filename = "VisualData.mat";
-        if ~exist('net', 'var')
-            uialert(fig, 'Please train the model before visualizing.', 'Error');
+        if isempty(net)
+            uialert(fig, 'Please train or load a pretrained model before visualizing.', 'Error');
             return;
         end
-        RiskArray = testRNN(net, filename);
-        Visualization(RiskArray);
+        try
+            RiskArray = testRNN(net, filename);
+            Visualization(RiskArray);
+        catch ME
+            uialert(fig, 'Error during visualization. Please check the test data.', 'Visualization Error');
+            disp(ME.message);  % Display the error message for debugging
+        end
+    end
+
+    % Callback for using a pretrained model
+    function usePretrainedCallback()
+        try
+            loadedData = load('TrainedModel.mat');
+            net = loadedData.net;
+            uialert(fig, 'Pretrained model loaded successfully.', 'Model Loaded');
+        catch ME
+            uialert(fig, 'Error loading pretrained model. Please check the file.', 'Load Error');
+            disp(ME.message);  % Display the error message for debugging
+        end
     end
 end

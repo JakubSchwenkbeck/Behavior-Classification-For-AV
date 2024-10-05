@@ -1,3 +1,4 @@
+
 function GUI
     % GUI - Creates a graphical user interface for the Main function.
     % 
@@ -114,7 +115,8 @@ function GUI
     function usePretrainedCallback()
         try
             loadedData = load('TrainedModel.mat');
-            net = loadedData.net;
+            net = loadedData.net; % Loading needs to be done in order for visualization to be done
+            Main(); % Using the default pretrained method
             uialert(fig, 'Pretrained model loaded successfully.', 'Model Loaded');
         catch ME
             uialert(fig, 'Error loading pretrained model. Please check the file.', 'Load Error');

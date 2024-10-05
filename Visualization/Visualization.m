@@ -21,13 +21,14 @@ function [allData, scenario, sensor] = TestScenarioForVisualization(RiskArray)
     %   sensor (lidarPointCloudGenerator): The sensor object used for generating 
     %   point cloud data in the scenario.
 
-    % Create the driving scenario and the ego vehicle
-    [scenario, egoVehicle] = createDrivingScenario();
+    % Create the driving scenario and the ego vehicle with pedestrians
+    [scenario, egoVehicle,pedestrian,pedestrian1] = createDrivingScenario();
 
     % previous handles keep track of persistent variables like texts in the
     % loop
     previousHandles = struct();
 
+ 
     % Create the sensors used in the scenario
     sensor = createSensor(scenario);
 
@@ -50,8 +51,9 @@ numericRiskArray = str2double(cellArray);
     riskIndex = 1;
 
     % Main loop to simulate the scenario and update the visualization
-    % Initialize handle arrays for pedestrian circles
+    % Initialize handle arrays
 circleHandles = [];
+    textHandles = struct('Ped1', [], 'Ped2', [], 'Ego', []);
 
 timecount = 0;
 
@@ -96,27 +98,8 @@ while running
                 delete(circleHandles(idx));
             end
         end
-        circleHandles = [];
-        
-        % Draw new circles for each pedestrian
-        pedestrianPoses = getPedestrianPoses(scenario); % You need to implement this function
-        
-        for p = 1:size(pedestrianPoses, 1)
-            pedestrianPos = pedestrianPoses(p, :);
-            % Choose circle color based on risk
-            color = riskToColor(currentRisk);
-            
-            % Draw circle on Y = 0 plane
-            theta = linspace(0, 2*pi, 100);
-            x = 1 * cos(theta); % Radius of the circle
-            y = 1 * sin(theta); % Radius of the circle
-            z = zeros(size(theta)); % Z = 0 for the plane
-
-            % Update or create circle plot
-            hold on;
-            circleHandles(p) = plot3(pedestrianPos(1) + x, pedestrianPos(2) + y, 0 * z, 'Color', color, 'LineWidth', 2);
-        end
-
+     
+       
         riskIndex = riskIndex + 1;
 
         end
@@ -131,6 +114,22 @@ camva(60); % Field of view (adjust as necessary)
 campos(camPos); % Set camera position
 camtarget(camTarget); % Set where the camera is looking
 
+      
+        % Update the positions of the text labels to follow their respective actors
+        if isempty(textHandles.Ped1) % If labels haven't been initialized, create them
+            textHandles.Ped1 = text(12, 10, 1, 'Ped1', 'FontSize', 8, 'Color', 'blue');
+            textHandles.Ped2 = text(44, 4, 1, 'Ped2', 'FontSize', 8, 'Color', 'red');
+textHandles.Ego = text(10, -1, 1, 'egoVehicle', 'FontSize', 8, 'Color', [1, 0.5, 0]); % Orange color using RGB triplet
+
+        else % Update their positions
+            ped1Pos = pedestrian.Position; % Pedestrian 1 position
+            ped2Pos = pedestrian1.Position; % Pedestrian 2 position
+            egoPos = egoVehicle.Position; % Ego vehicle position
+
+            set(textHandles.Ped1, 'Position', [ped1Pos(1), ped1Pos(2)+3.5, 0.5]);
+            set(textHandles.Ped2, 'Position', [ped2Pos(1), ped2Pos(2)+3.5, 0.5]);
+            set(textHandles.Ego, 'Position', [egoPos(1), egoPos(2)-2, 0.5]);
+        end
 
     % Advance the scenario one time step; exit if scenario is complete
     running = advance(scenario);
@@ -139,36 +138,6 @@ camtarget(camTarget); % Set where the camera is looking
     pause(0.1); % Adjust to match simulation time step
 end
 
-
-function pedestrianPoses = getPedestrianPoses(scenario)
-    % getPedestrianPoses - Retrieves the positions of all pedestrians in the scenario.
-    %
-    % Args:
-    %   scenario - The driving scenario object.
-    %
-    % Returns:
-    %   pedestrianPoses - A matrix where each row represents a pedestrian's position [x, y].
-    
-    % Initialize an empty array to store pedestrian positions
-    pedestrianPoses = [];
-    
-    % Get all actors in the scenario
-    actors = scenario.Actors;
-    
-    % Loop through all actors
-    for i = 1:length(actors)
-        actor = actors(i);
-        
-        % Check if the actor is a pedestrian
-        if isa(actor, 'matlab.driving.scenario.Pedestrian')
-            % Get the actor's position
-            position = actor.Position;
-            
-            % Append the position to the array
-            pedestrianPoses = [pedestrianPoses; position];
-        end
-    end
-end
 
 
 
@@ -235,7 +204,6 @@ function previousHandles =riskOverlay(currentRisk,previousHandles)
     previousHandles.riskText = riskText;
 end
 
-
 function sensor = createSensor(scenario)
     % createSensor - Creates and returns a sensor object for the scenario.
     %
@@ -256,7 +224,7 @@ function sensor = createSensor(scenario)
         'ActorProfiles', profiles);
 end
 
-function [scenario, egoVehicle] = createDrivingScenario
+function [scenario, egoVehicle,pedestrian,pedestrian1] = createDrivingScenario
     % createDrivingScenario - Sets up a driving scenario for simulation.
     %
     % This helper function creates a driving scenario with defined roads and 
@@ -264,15 +232,15 @@ function [scenario, egoVehicle] = createDrivingScenario
     % added to the scenario, which will be used in the simulation.
     %
     % Returns:
-    %   scenario (drivingScenario): The initialized driving scenario object.
+    %   scenario (drivingScenario): The initialized driv ing scenario object.
     %   egoVehicle (vehicle): The ego vehicle in the scenario.
 
     % Create a driving scenario object
     scenario = drivingScenario;
 
     % Define road segments
-    roadCenters = [10 0 0;
-                   35.2 0 0;
+    roadCenters = [10 0 0.1;
+                   35.2 0 0.1;
                    45.6 0 0];
     road(scenario, roadCenters, 'Name', 'Road');
 
@@ -282,12 +250,12 @@ function [scenario, egoVehicle] = createDrivingScenario
         'Length', 0.24, ...
         'Width', 0.45, ...
         'Height', 1.7, ...
-        'Position', [12.8 10 0], ...
+        'Position', [12.8 10 0.1], ...
         'RCSPattern', [-8 -8; -8 -8], ...
         'Mesh', driving.scenario.pedestrianMesh, ...
         'Name', 'Pedestrian');
-    waypoints = [12.8 10 0;
-                 20.7 10.2 0];
+    waypoints = [12.8 10 0.1;
+                 20.7 10.2 0.1];
     speed = [1.5; 1.5];
     trajectory(pedestrian, waypoints, speed);
 
@@ -296,23 +264,23 @@ function [scenario, egoVehicle] = createDrivingScenario
         'Length', 0.24, ...
         'Width', 0.45, ...
         'Height', 1.7, ...
-        'Position', [44.3 3.4 0], ...
+        'Position', [44.3 3.4 0.1], ...
         'RCSPattern', [-8 -8; -8 -8], ...
         'Mesh', driving.scenario.pedestrianMesh, ...
         'Name', 'Pedestrian1');
-    waypoints = [44.3 3.9 0;
-                 39.6 2.7 0];
+    waypoints = [44.3 3.9 0.1;
+                 39.6 2.7 0.1];
     speed = [2; 2];
     trajectory(pedestrian1, waypoints, speed);
 
     % Add the ego vehicle
     egoVehicle = vehicle(scenario, ...
         'ClassID', 1, ...
-        'Position', [10.2 -0.1 0], ...
+        'Position', [10.2 -0.1 0.1], ...
         'Mesh', driving.scenario.carMesh, ...
         'Name', 'Car');
-    waypoints = [10.2 -0.1 0;
-                 45.5 0.1 0];
+    waypoints = [10.2 -0.1 0.1;
+                 45.5 0.1 0.1];
     speed = [15; 15];
     trajectory(egoVehicle, waypoints, speed);
 end

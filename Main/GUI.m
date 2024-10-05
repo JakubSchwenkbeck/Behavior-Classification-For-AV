@@ -67,7 +67,7 @@ function GUI
         folderPath = uigetdir('C:\', 'Select Sensor Data Folder');
         if folderPath ~= 0
             try
-                [dataSize, allData] = loadAllData(folderPath);
+                [dataSize, allData] = Main().loadAllData(folderPath);
                 uialert(fig, ['Loaded ' num2str(dataSize) ' files from ' folderPath], 'Data Loaded');
             catch ME
                 uialert(fig, 'Error loading data. Please check your folder and try again.', 'Load Error');

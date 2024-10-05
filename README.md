@@ -41,7 +41,7 @@ To begin this project, I created a MATLAB project, initialized a Git repository,
 The Scenario Designer from the Automated Driving Toolbox™ was used to create driving scenarios, including traffic, pedestrians, and different driving behaviors.
 ### Data Transformation:
 - **preprocessSensorData.m**: A custom script to clean and preprocess sensor data, including noise reduction and handling missing data.
-- **dataAugmentation.m**: Data augmentation was applied to expand the training dataset by simulating variations in lighting, weather, and sensor noise.
+- **dataAugmentation.m**: Data augmentation was applied to expand the training dataset by simulating variations in sensor noise.
   
 ## 3. **Model**
 ### Model Selection:

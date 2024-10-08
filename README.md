@@ -98,7 +98,8 @@ The training achieved an accuracy of 95%-99% in classifying behaviors.
 - **Visualization Folder**: Contains various visualizations related to scenario testing, including 2D and 3D representations of object trajectories and behaviors.
 - **Main.m**: Main entry point to run the project, visualize results, and interact with the GUI.
 - **GUI.m**: A custom GUI for interacting with the project’s scenarios, results, and predictions.
-  
+
+  The Scene(s) are created in the Scenebuilder and then via the 'export Matlab function' utility converted into a program. 
 ## 6. **Integration with Java Interface**
 ### Java-Matlab Interface:
 I extended the project by integrating a JavaInterface to connect a Model that performs object recognition. The integration between MATLAB and Java enhances the object risk classification model by incorporating visual input directly from the vehicle’s sensors.

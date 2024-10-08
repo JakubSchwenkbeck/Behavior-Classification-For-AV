@@ -39,10 +39,15 @@ To begin this project, I created a MATLAB project, initialized a Git repository,
 ## 2. **Data Understanding & Transformation**
 ### Scene Creation:
 The Scenario Designer from the Automated Driving Toolbox™ was used to create driving scenarios, including traffic, pedestrians, and different driving behaviors.
+
+### Data retrieval:
+The Data [Found here](https://www.dropbox.com/scl/fo/u1n1o0anct4c4yhb6cblb/AFp1VxLP_zYPJmahg9-xAUE?rlkey=crsaqf5a2vtgbr6xyoeei3vce&st=032cfis8&dl=0) is created by running the Scene Builder simulation and then exporting the sensor data. They don't hold the scenario itself but only the sensor data, therefore they can be opened in the normal Matlab workplace
+
+
 ### Data Transformation:
 - **preprocessSensorData.m**: A custom script to clean and preprocess sensor data, including noise reduction and handling missing data.
 - **dataAugmentation.m**: Data augmentation was applied to expand the training dataset by simulating variations in sensor noise.
-  
+
 ## 3. **Model**
 ### Model Selection:
 I chose an RNN to classify risky vs. safe behavior since it is ideal for processing sequences of time-series data and can capture temporal dependencies in object behavior.

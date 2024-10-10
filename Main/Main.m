@@ -28,17 +28,7 @@ function Main
     %}
     loadedData = load('TrainedModel.mat');
     net = loadedData.net;
-
-    
-    % Define the filename for the testing dataset
-    filename = "VisualData.mat";
-    
-    % Test the trained RNN using the new dataset and get the risk classification
-    RiskArray = testRNN(net, filename);
-
-    % Visualize the classified risk levels
-    Visualization(RiskArray);
-
+VisGUI(net);
 end
 
 function [dataSize, allData] = loadAllData(folderPath)

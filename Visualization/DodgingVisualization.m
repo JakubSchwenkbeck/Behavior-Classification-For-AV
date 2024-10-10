@@ -1,4 +1,4 @@
-function [allData, scenario, sensor] = DodgingVisualization(RiskArray)
+function [allData, scenario, sensor] = DodgingVisualization(net)
     % TestScenarioForVisualization - Simulates a driving scenario and visualizes risk levels.
     % This function simulates the "Ausweich" driving scenario and overlays risk visualization.
     % Args:
@@ -17,9 +17,8 @@ function [allData, scenario, sensor] = DodgingVisualization(RiskArray)
     % Create the sensors used in the scenario
     sensor = createSensor(scenario);
 
-    % Prepare the figure for visualization
-    figure('Name', 'Risk Visualization', 'NumberTitle', 'off');
-    hold on;
+    RiskArray = testRNN(net,'DodgingData.mat');
+    
 
     % Initial plot of the scenario
     plot(scenario);
@@ -77,12 +76,12 @@ function [allData, scenario, sensor] = DodgingVisualization(RiskArray)
             end
         end
 
-        % Set camera position and view for visualization
-        camPos = egoVehicle.Position + [-20 -5 10]; % 15 units behind, 5 to the left, and 5 above
-        camTarget = egoVehicle.Position + [10 0 0]; % 10 units ahead of the car
-        camva(60); % Field of view
-        campos(camPos);
-        camtarget(camTarget);
+% Set camera position and view for a bird's-eye (top-down) view
+camPos = egoVehicle.Position + [0 0 50];  % Directly above the ego vehicle (50 units above)
+camTarget = egoVehicle.Position;  % Focus on the ego vehicle
+camva(60);  % Field of view (can be adjusted as needed)
+campos(camPos);  % Set the camera position directly above
+camtarget(camTarget);  % Set the camera target to the ego vehicle
 
         % Update text labels for actors
         if isempty(textHandles.Pedestrian) % Initialize text labels

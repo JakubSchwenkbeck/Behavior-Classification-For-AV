@@ -1,4 +1,4 @@
-function [allData, scenario, sensor] = TestScenarioForVisualization(RiskArray)
+function [allData, scenario, sensor] = StandardVisualization(net)
     % TestScenarioForVisualization - Simulates a driving scenario and visualizes risk levels.
     %
     % This function simulates a driving scenario using a pre-defined set of roads,
@@ -28,13 +28,11 @@ function [allData, scenario, sensor] = TestScenarioForVisualization(RiskArray)
     % loop
     previousHandles = struct();
 
- 
+ RiskArray = testRNN(net,'VisualData.mat');
     % Create the sensors used in the scenario
     sensor = createSensor(scenario);
 
-    % Prepare the figure for visualization
-    figure('Name', 'Risk Visualization', 'NumberTitle', 'off');
-    hold on;
+
 
     % Initial plot of the scenario
     plot(scenario);
@@ -90,7 +88,7 @@ while running
     if riskIndex <= length(numericRiskArray)
      
         currentRisk = numericRiskArray(riskIndex);
-        if mod(timecount, 9) == 0
+        if mod(timecount, 10) == 0
         disp(" The current Risk : " + currentRisk)
         % Update existing circles or create new ones
         for idx = 1:numel(circleHandles)

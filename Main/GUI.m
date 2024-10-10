@@ -49,9 +49,9 @@ function GUI
 
     % Button for using a pretrained model with modern styling
     usePretrainedBtn = uibutton(panel, 'push', ...
-        'Text', 'Load & Use Pretrained Model', ...
+        'Text', 'Load % Visualize Pretrained Model', ...
         'Position', [100 80 200 40], ...
-        'FontSize', 13, 'FontWeight', 'bold', ...
+        'FontSize', 12, 'FontWeight', 'bold', ...
         'BackgroundColor', [0.6 0.2 0.8], 'FontColor', 'white', ...
         'ButtonPushedFcn', @(btn,event) usePretrainedCallback());
 
@@ -112,14 +112,13 @@ function GUI
     % Callback for visualizing the model
     function visualizeModelCallback()
         % Load test data and visualize the model results
-        filename = "VisualData.mat";
+     
         if isempty(net)
             uialert(fig, 'Please train or load a pretrained model before visualizing.', 'Error');
             return;
         end
         try
-            RiskArray = testRNN(net, filename);
-            Visualization(RiskArray);
+            VisGUI(net);
         catch ME
             uialert(fig, 'Error during visualization. Please check the test data.', 'Visualization Error');
             disp(ME.message);  % Display the error message for debugging

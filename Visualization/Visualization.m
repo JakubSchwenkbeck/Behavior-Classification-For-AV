@@ -150,19 +150,35 @@ end
 % Helper functions %
 %%%%%%%%%%%%%%%%%%%%
 function color = riskToColor(risk)
-    % Maps risk level to color
-    % Risk levels: 0 = No risk, 0.3 = Low risk, 0.5 = Moderate risk, 0.7 = High risk, 1 = Very high risk
- % Refined color selection based on risk level (continuous gradient)
-if risk >= 0.6
-    color = [1, (1 - risk) / 0.3, 0];  % Gradient from orange to red
-elseif risk >= 0.5
-    color = [1, (risk - 0.4) / 0.2, 0]; % Gradient from yellow to orange
-elseif risk >= 0.2
-    color = [1, 1, (risk - 0.2) / 0.2]; % Gradient from green to yellow
-else
-    color = [0, 1, 0]; % Pure green for low risk
-end
+    % Convert risk level to a specific color based on discrete steps (0 to 1)
+    % Green for low risk, Orange for mid-range, and Red for high risk
 
+    if risk == 0
+        color = [0, 1, 0]; % Green
+    elseif risk <= 0.1
+        color = [0.1, 1, 0]; % Light green
+    elseif risk <= 0.2
+        color = [0.3, 1, 0]; % Green-yellow
+    elseif risk <= 0.3
+        color = [0.5, 1, 0]; % Yellowish-green
+    elseif risk <= 0.4
+        color = [0.8, 1, 0]; % Yellow-green
+    elseif risk <= 0.5
+        color = [1, 1, 0]; % Yellow (middle)
+    elseif risk <= 0.6
+        color = [1, 0.8, 0]; % Yellow-orange
+    elseif risk <= 0.7
+        color = [1, 0.5, 0]; % Orange
+    elseif risk <= 0.8
+        color = [1, 0.3, 0]; % Darker orange
+    elseif risk <= 0.9
+        color = [1, 0.1, 0]; % Orange-red
+    elseif risk == 1
+        color = [1, 0, 0]; % Red
+    else
+        color = [0, 1, 0]; % Default to green for any unexpected value
+    end
+end
 end
 function previousHandles =riskOverlay(currentRisk,previousHandles)
     % riskOverlay - Adds a colored overlay representing risk level.

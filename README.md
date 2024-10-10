@@ -97,7 +97,7 @@ The training achieved an accuracy of 95%-99% in classifying behaviors.
 ## 5. **Visualization**
 - **Visualization Folder**: Contains various visualizations related to scenario testing, including 2D and 3D representations of object trajectories and behaviors.
 - **Main.m**: Main entry point to run the project, visualize results, and interact with the GUI.
-- **GUI.m**: A custom GUI for interacting with the project’s scenarios, results, and predictions.
+- **VisGUI.m**: A custom GUI for interacting with the different Scenario Visualizations.
 
   The Scene(s) are created in the Scenebuilder and then via the 'export Matlab function' utility converted into a program. 
 ## 6. **Integration with Java Interface**

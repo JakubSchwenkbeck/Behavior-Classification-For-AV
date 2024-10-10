@@ -1,4 +1,4 @@
-function predictedLabels = testRNN(TrainedNet, filename)
+function predictedLabels = testRNN(TrainedNet,filename)
     % testRNN - Loads and preprocesses sensor data, then classifies it using a trained RNN.
     %
     % Args:
@@ -19,11 +19,14 @@ function predictedLabels = testRNN(TrainedNet, filename)
     filePath = fullfile(folderPath, filename);
     %}
     % Load the .mat file into a structure
-    dataStruct = load('Visualization\VisualData.mat');
-    
-    % Extract and preprocess the sensor data
-    data = preprocessSensorData(dataStruct.('VisualData'));
-    
+   dataStruct = load(fullfile('Visualization', filename));
+
+ % Extract the single field name from dataStruct
+fieldName = fieldnames(dataStruct);
+
+% Access and preprocess the sensor data using the single field
+data = preprocessSensorData(dataStruct.(fieldName{1}));
+
     % Classify the preprocessed data using the trained RNN
     predictedLabels = classify(TrainedNet, transpose(data));
     

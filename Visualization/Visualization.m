@@ -179,7 +179,7 @@ function color = riskToColor(risk)
         color = [0, 1, 0]; % Default to green for any unexpected value
     end
 end
-end
+
 function previousHandles =riskOverlay(currentRisk,previousHandles)
     % riskOverlay - Adds a colored overlay representing risk level.
     %

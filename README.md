@@ -25,6 +25,8 @@ Welcome to the **Behavior Classificator for Autonomous Vehicles** project! This 
 
 The project aims to classify the behavior of objects within autonomous driving scenarios using a Recurrent Neural Network (RNN). The goal is to understand the behavior of objects and predict their risk level, which is crucial for the safe operation of autonomous vehicles.
 
+It is certifcated by Mathworks with the *Excellence in Innovation* Certificate
+
 ## About Me
 
 I am Jakub, currently enrolled as computer science student pursuing a bachelors degree. Since I am working with Matlab for some time now, I was more than excited to have the oppertunity to partake in the Matlab/Simulink Challenge. 

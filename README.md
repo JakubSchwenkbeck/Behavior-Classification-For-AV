@@ -13,7 +13,7 @@ Invited to the ReadyTensor [Computer Vision Competition](https://app.readytensor
 </p>
 <p align="center">
   <img src="https://github.com/user-attachments/assets/959e457c-d878-4230-a569-772d0c42fc63" alt="Image 3" width="800" height = "500"/>
-  <img src="https://github.com/user-attachments/assets/020c6583-18e2-4f0f-9356-ceeeeac65f4f" alt="Image 4" width="800" height = "500"/>
+  <img src="https://github.com/user-attachments/assets/d2a62e33-cb2f-41d4-a8dc-cc3bf087a2dd" alt="Image 4" width="800" height = "500"/>
 </p>
 
 

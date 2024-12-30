@@ -36,8 +36,6 @@ It is certifcated by Mathworks with the *Excellence in Innovation* Certificate
 
 I am Jakub, currently enrolled as computer science student pursuing a bachelors degree. Since I am working with Matlab for some time now, I was more than excited to have the oppertunity to partake in the Matlab/Simulink Challenge. 
 
-Studying for the Bachelors degree means, that this project (classified for Masters/Doctors) was a big challenge and I therefore altered some goals and expectations to fit my personal skills. I hope it can be reviewed under a undergrad standard and if minor issues occur, the project isn't just thrown away:)
-
 I chose this particular project because, not only am I interested and enthusiastic in learning more about Artifical Intelligence, but I really like to create Matlab Code with real world applications.
 
 ## Workflow

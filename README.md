@@ -12,8 +12,8 @@ Invited to the ReadyTensor [Computer Vision Competition](https://app.readytensor
   <img src="https://github.com/user-attachments/assets/e1d69962-cb40-4f6d-aea6-752ea45abd88" alt="Image 2" width="400"height = "300"/>
 </p>
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/13dbe3e5-f5ac-41b9-89d9-269f72e6cf5c" alt="Image 3" width="400" height = "300"/>
-  <img src="https://github.com/user-attachments/assets/eb85a8eb-057d-4a23-9312-f5c3b75f9e31" alt="Image 4" width="400" height = "300"/>
+  <img src="https://github.com/user-attachments/assets/959e457c-d878-4230-a569-772d0c42fc63" alt="Image 3" width="800" height = "500"/>
+  <img src="https://github.com/user-attachments/assets/020c6583-18e2-4f0f-9356-ceeeeac65f4f" alt="Image 4" width="800" height = "500"/>
 </p>
 
 

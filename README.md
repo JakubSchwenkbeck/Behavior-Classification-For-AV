@@ -16,6 +16,8 @@ Invited to the ReadyTensor [Computer Vision Competition](https://app.readytensor
   <img src="https://github.com/user-attachments/assets/d2a62e33-cb2f-41d4-a8dc-cc3bf087a2dd" alt="Image 4" width="800" height = "500"/>
 </p>
 
+![image](https://github.com/user-attachments/assets/de28337e-18d2-4ffd-9e74-57bc3c4470e3)
+
 
 ## Table of Contents
 - [Overview](#overview)
